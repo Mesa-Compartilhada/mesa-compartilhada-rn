@@ -1,6 +1,4 @@
-import { colors } from "@/constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
-import { TouchableOpacity, TouchableOpacityProps, StyleSheet, Text } from "react-native";
+import { TouchableOpacity, TouchableOpacityProps, Text } from "react-native";
 
 type Props = {
     title: string,
@@ -10,25 +8,9 @@ type Props = {
 
 export default function ButtonDefault({ title, onPress, icon, ...rest }: Props) {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.button} activeOpacity={0.7} >
+        <TouchableOpacity className="bg-azul p-4 rounded-md flex-row gap-4 items-center" onPress={onPress} activeOpacity={0.7} >
             {icon}
-            <Text style={styles.text}>{ title }</Text>
+            <Text className="text-xl text-white font-bold">{ title }</Text>
         </TouchableOpacity>
     )
 }
-
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: colors.azul,
-        padding: 10,
-        borderRadius: 5,
-        flexDirection: "row",
-        gap: 4,
-        alignItems: "center"
-    },
-    text: {
-        fontSize: 20,
-        color: "white",
-        fontWeight: "bold",
-    }
-})

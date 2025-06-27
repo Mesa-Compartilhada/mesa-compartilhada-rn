@@ -8,9 +8,9 @@ type Props = {
 
 export default function ButtonDefault({ title, onPress, icon, ...rest }: Props) {
     return (
-        <TouchableOpacity className="bg-azul p-4 rounded-md flex-row gap-4 items-center" onPress={onPress} activeOpacity={0.7} >
+        <TouchableOpacity className="bg-azul p-4 rounded-md flex-row gap-4 items-center" onPress={onPress} activeOpacity={0.7} { ...rest } >
             {icon}
-            <Text className="text-xl text-white font-bold">{ title }</Text>
+            <Text className="text-2xl text-white font-bold">{ title }</Text>
         </TouchableOpacity>
     )
 }

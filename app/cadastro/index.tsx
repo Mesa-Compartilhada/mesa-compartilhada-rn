@@ -1,7 +1,7 @@
 import InputDefault from "@/components/inputs/inputDefault";
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import Logo from "@/assets/images/mc_logo_fruteira.svg"
 import ButtonDefault from "@/components/buttons/buttonDefault";
 
@@ -55,104 +55,99 @@ export default function Cadastro() {
                 handleChange,
                 handleSubmit
             }) => (
-                <View className="flex-1 self-center  gap-4">        
-                    <View className="self-center">
-                        <Logo width={150} />
+                <KeyboardAvoidingView 
+                    className="self-center w-full px-4 my-4"
+                    behavior={Platform.OS == 'ios' ? 'padding' : 'height'}    
+                >
+                    <View className="h-3/4 my-2 gap-4">
+                        <View>
+                            <InputDefault 
+                                value={values.cnpj}
+                                onChangeText={handleChange("cnpj")}
+                                Icon={ 
+                                    <MaterialIcons 
+                                    name="perm-identity" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="000-0000"
+                                error={errors.cnpj}
+                                autoCapitalize="none" 
+                                />
+                        </View>
+                        
+                        <View>
+                            <InputDefault 
+                                value={values.nome}
+                                onChangeText={handleChange("nome")}
+                                Icon={ 
+                                    <MaterialIcons 
+                                    name="account-circle" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="Companhia LTDA."
+                                error={errors.nome}
+                                autoCapitalize="none" 
+                                />
+                        </View>
+                        
+                        <View>
+                            <InputDefault 
+                                value={values.email}
+                                onChangeText={handleChange("email")}
+                                Icon={ 
+                                    <MaterialIcons 
+                                    name="email" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="exemplo@gmail.com"
+                                autoCapitalize="none" 
+                                error={errors.email}
+                                />
+                        </View>
+                        
+                        <View>
+                            <InputDefault 
+                                value={values.senha}
+                                onChangeText={handleChange("senha")}
+                                Icon={
+                                    <MaterialIcons 
+                                    name="password" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="******" 
+                                error={errors.senha}
+                                secureTextEntry={true}
+                                autoCapitalize="none"
+                                />
+                        </View>
+                        
+                        <View>
+                            <InputDefault 
+                                value={values.confirmacaoDeSenha}
+                                onChangeText={handleChange("confirmacaoDeSenha")}
+                                Icon={
+                                    <MaterialIcons 
+                                    name="password" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="******" 
+                                error={errors.confirmacaoDeSenha}
+                                secureTextEntry={true}
+                                autoCapitalize="none"
+                                />
+                        </View>
                     </View>
-
-                    {/* <DropdownPicker 
-                        items={[
-                            { label: "Doadora", value: "1" },
-                            { label: "Recebedora", value: "2" },
-                        ]}
-                    /> */}
-
-                    <InputDefault 
-                        value={values.cnpj}
-                        onChangeText={handleChange("cnpj")}
-                        Icon={ 
-                            <MaterialIcons 
-                            name="perm-identity" 
-                            color={Colors.azul} 
-                        size={24} />} 
-                        placeholder="000-0000"
-                        autoCapitalize="none" 
-                        />
-                    <Text className="text-xs text-red-700">
-                        { errors.cnpj }
-                    </Text>
-
-                    <InputDefault 
-                        value={values.nome}
-                        onChangeText={handleChange("nome")}
-                        Icon={ 
-                            <MaterialIcons 
-                            name="account-circle" 
-                            color={Colors.azul} 
-                        size={24} />} 
-                        placeholder="Companhia LTDA."
-                        autoCapitalize="none" 
-                        />
-                    <Text className="text-xs text-red-700">
-                        { errors.nome }
-                    </Text>
-
-                    <InputDefault 
-                        value={values.email}
-                        onChangeText={handleChange("email")}
-                        Icon={ 
-                            <MaterialIcons 
-                            name="email" 
-                            color={Colors.azul} 
-                        size={24} />} 
-                        placeholder="exemplo@gmail.com"
-                        autoCapitalize="none" 
-                        />
-                    <Text className="text-xs text-red-700">
-                        { errors.email }
-                    </Text>
-
-                    <InputDefault 
-                        value={values.senha}
-                        onChangeText={handleChange("senha")}
-                        Icon={
-                            <MaterialIcons 
-                            name="password" 
-                            color={Colors.azul} 
-                        size={24} />} 
-                        placeholder="******" 
-                        secureTextEntry={true}
-                        autoCapitalize="none"
-                        />
-                    <Text className="text-xs text-red-700">
-                        { errors.senha }
-                    </Text>
-                    <InputDefault 
-                        value={values.confirmacaoDeSenha}
-                        onChangeText={handleChange("confirmacaoDeSenha")}
-                        Icon={
-                            <MaterialIcons 
-                            name="password" 
-                            color={Colors.azul} 
-                        size={24} />} 
-                        placeholder="******" 
-                        secureTextEntry={true}
-                        autoCapitalize="none"
-                        />
-                    <Text className="text-xs text-red-700">
-                        { errors.confirmacaoDeSenha }
-                    </Text>
-
-                    <View className="mr-auto">
+                    <View className="">
                         <ButtonDefault 
                             icon={<MaterialIcons name="login" size={24} color={"white"} />}
-                            title="Entrar"
+                            title="Cadastrar"
                             onPress={handleSubmit as any} // handleSubmit sem 'as any' causa um erro de tipagem, apesar de não afetar o funcionamento
                         />
                     </View>
-                </View>
+                </KeyboardAvoidingView>
             )
             }
         </Formik>
+        
     )
 }

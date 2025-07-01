@@ -14,7 +14,7 @@ export default function Home() {
                 color={"white"} />} 
                 title="Login" 
                 onPress={() => navigate("/login")} />
-            <ButtonDefault icon={<MaterialCommunityIcons name="account" size={24} color={"white"} />} title="Cadastro" onPress={() => navigate("/")} />
+            <ButtonDefault icon={<MaterialCommunityIcons name="account" size={24} color={"white"} />} title="Cadastro" onPress={() => navigate("/cadastro")} />
         </View>
     )
 }

@@ -1,6 +1,6 @@
-import { empresa } from "./empresa"
+import { Empresa } from "./empresa"
 
-export type doacao = {
+export type Doacao = {
     id: string
     nome: string
     descricao: string,
@@ -15,15 +15,15 @@ export type doacao = {
     horarioMax: string,
     tipoAlimento: string,
     tipoArmazenamento: string,
-    empresaDoadora: empresa,
-    empresaRecebedora: empresa,
+    empresaDoadora: Empresa,
+    empresaRecebedora: Empresa,
     empresaDoadoraConcluida: boolean,
     empresaRecebedoraConcluida: boolean,
     quantidade: number,
     unidadeMedida: string
 }
 
-export type doacaoAdd = {
+export type DoacaoAdd = {
     nome: string
     descricao: string,
     observacao: string,
@@ -40,13 +40,13 @@ export type doacaoAdd = {
     unidadeMedida: number
 }
 
-export type doacaoUpdateState = {
+export type DoacaoUpdateState = {
     status: string,
     empresaRecebedoraId: string,
     empresaSolicitanteId: string
 }
 
-export type doacaoFilter = {
+export type DoacaoFilter = {
     status: string[],
     dataFabricacaoMin: string,
     dataFabricacaoMax: string,

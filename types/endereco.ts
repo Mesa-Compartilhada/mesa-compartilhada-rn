@@ -1,4 +1,4 @@
-export type endereco = {
+export type Endereco = {
     id: string,
     cep: string,
     numero: string,
@@ -12,7 +12,7 @@ export type endereco = {
     longitude: number
 }
 
-export type enderecoAdd = {
+export type EnderecoAdd = {
     cep: string,
     numero: string,
     logradouro: string,

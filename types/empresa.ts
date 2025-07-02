@@ -1,6 +1,6 @@
-import { endereco } from "./endereco"
+import { Endereco } from "./endereco"
 
-export type empresa = {
+export type Empresa = {
     id: string,
     cnpj: string,
     tipo: string,
@@ -8,10 +8,10 @@ export type empresa = {
     nome: string,
     email: string,
     status: string,
-    endereco: endereco
+    endereco: Endereco
 }
 
-export type empresaAdd = {
+export type EmpresaAdd = {
     cnpj: string,
     tipo: number,
     categoria: number,
@@ -21,12 +21,12 @@ export type empresaAdd = {
     enderecoId: string
 }
 
-export type empresaLogin = {
+export type EmpresaLogin = {
     email: string,
     senha: string
 }
 
-export type empresaUpdate = {
+export type EmpresaUpdate = {
     cnpj: string,
     tipo: number,
     categoria: number,
@@ -35,7 +35,7 @@ export type empresaUpdate = {
     enderecoId: string
 }
 
-export type empresaResetPassword = {
+export type EmpresaResetPassword = {
     token: string,
     senha: string
 }

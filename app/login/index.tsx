@@ -1,9 +1,9 @@
 import InputDefault from "@/components/inputs/inputDefault";
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import Logo from "@/assets/images/mc_logo_fruteira.svg"
+import { View, KeyboardAvoidingView, Platform } from "react-native";
 import ButtonDefault from "@/components/buttons/buttonDefault";
+import { login as loginEmpresa } from "@/api/services/authService"
 
 import { Formik } from "formik"
 import * as yup from "yup"
@@ -17,8 +17,12 @@ const schema = yup.object().shape({
 })
 
 export default function Login() {
-    function login(email: string, senha: string) {
-        console.log(email, senha)
+    async function login(email: string, senha: string) {
+        // implementar expo-secure-store para armazenar token jwt
+        console.log(await loginEmpresa({
+            email: email,
+            senha: senha
+        }))
     }
 
     return (

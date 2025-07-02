@@ -7,6 +7,7 @@ import ButtonDefault from "@/components/buttons/buttonDefault";
 
 import { Formik } from "formik"
 import * as yup from "yup"
+import { useState } from "react";
 
 const schema = yup.object().shape({
     cnpj: yup.string()
@@ -30,6 +31,11 @@ const schema = yup.object().shape({
 })
 
 export default function Cadastro() {
+    const [tipoEmpresa, setTipoEmpresa] = useState([
+        "Doadora",
+        "Recebedora"
+    ])
+
     function cadastro(cnpj: string, nome: string, email: string, senha: string) {
         console.log(cnpj, nome, email, senha)
     }

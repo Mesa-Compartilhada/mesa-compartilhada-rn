@@ -59,6 +59,7 @@ export default function Cadastro() {
                 touched,
                 isValid,
                 handleChange,
+                handleBlur,
                 handleSubmit
             }) => (
                 <KeyboardAvoidingView 
@@ -70,13 +71,14 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.cnpj}
                                 onChangeText={handleChange("cnpj")}
+                                onBlur={handleBlur("cnpj")}
                                 Icon={ 
                                     <MaterialIcons 
                                     name="perm-identity" 
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="000-0000"
-                                error={errors.cnpj}
+                                error={ touched.cnpj ? errors.cnpj : undefined}
                                 autoCapitalize="none" 
                                 />
                         </View>
@@ -85,13 +87,14 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.nome}
                                 onChangeText={handleChange("nome")}
+                                onBlur={handleBlur("nome")}
                                 Icon={ 
                                     <MaterialIcons 
                                     name="account-circle" 
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="Companhia LTDA."
-                                error={errors.nome}
+                                error={ touched.nome ? errors.nome : undefined }
                                 autoCapitalize="none" 
                                 />
                         </View>
@@ -100,6 +103,7 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.email}
                                 onChangeText={handleChange("email")}
+                                onBlur={handleBlur("email")}
                                 Icon={ 
                                     <MaterialIcons 
                                     name="email" 
@@ -107,7 +111,7 @@ export default function Cadastro() {
                                 size={24} />} 
                                 placeholder="exemplo@gmail.com"
                                 autoCapitalize="none" 
-                                error={errors.email}
+                                error={ touched.email ? errors.email : undefined }
                                 />
                         </View>
                         
@@ -115,13 +119,14 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.senha}
                                 onChangeText={handleChange("senha")}
+                                onBlur={handleBlur("senha")}
                                 Icon={
                                     <MaterialIcons 
                                     name="password" 
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="******" 
-                                error={errors.senha}
+                                error={ touched.senha ? errors.senha : undefined}
                                 secureTextEntry={true}
                                 autoCapitalize="none"
                                 />
@@ -131,13 +136,14 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.confirmacaoDeSenha}
                                 onChangeText={handleChange("confirmacaoDeSenha")}
+                                onBlur={handleBlur("confirmacaoDeSenha")}
                                 Icon={
                                     <MaterialIcons 
                                     name="password" 
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="******" 
-                                error={errors.confirmacaoDeSenha}
+                                error={ touched.confirmacaoDeSenha ? errors.confirmacaoDeSenha : undefined }
                                 secureTextEntry={true}
                                 autoCapitalize="none"
                                 />

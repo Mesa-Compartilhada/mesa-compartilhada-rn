@@ -11,15 +11,15 @@ export default function InputDefault({ Icon, placeholder, error, ...rest }: Prop
         <View className="gap-1">
             <View className="flex-row items-center self-center gap-2">
                 <TextInput 
-                    className={`text-xl flex-1 border-2 border-azul rounded-lg ${error && "border-red-700"}`}
+                    className={`text-xl flex-1 px-2 border-2 border-azul rounded-lg ${error && "border-red-700"}`}
                     placeholder={placeholder} 
                     { ...rest }
                 />
                 <View>
-                    {Icon}
+                    { Icon }
                 </View>
             </View>    
-            <Text className="text-xs text-red-700">
+            <Text className="text-xs text-red-700 mx-1">
                 { error }
             </Text>
         </View>

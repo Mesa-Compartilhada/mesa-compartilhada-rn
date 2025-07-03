@@ -43,6 +43,7 @@ export default function Login() {
                 touched,
                 isValid,
                 handleChange,
+                handleBlur, // passar no onBlur dos campos para validacao em tempo real
                 handleSubmit
             }) => (
                 <KeyboardAvoidingView 
@@ -53,26 +54,28 @@ export default function Login() {
                         <InputDefault 
                             value={values.email}
                             onChangeText={handleChange("email")}
+                            onBlur={handleBlur("email")}
                             Icon={ 
                                 <MaterialIcons 
                                 name="email" 
                                 color={Colors.azul} 
                             size={24} />} 
                             placeholder="exemplo@gmail.com"
-                            error={errors.email}
+                            error={ touched.email ? errors.email : undefined }
                             autoCapitalize="none" 
                         />
 
                         <InputDefault 
                             value={values.senha}
                             onChangeText={handleChange("senha")}
+                            onBlur={handleBlur("senha")}
                             Icon={
                                 <MaterialIcons 
                                 name="password" 
                                 color={Colors.azul} 
                             size={24} />} 
                             placeholder="******" 
-                            error={errors.senha}
+                            error={ touched.senha ? errors.senha : undefined }
                             secureTextEntry={true}
                             autoCapitalize="none"
                         />

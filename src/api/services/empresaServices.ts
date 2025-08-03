@@ -1,6 +1,6 @@
 import ENDPOINTS from "../endpoints";
 import api from "../axios";
-import { Empresa, EmpresaAdd, EmpresaUpdate } from "@/types/empresa";
+import { Empresa, EmpresaAdd, EmpresaUpdate } from "@/src/types/empresa";
 
 export async function addEmpresa(empresa: EmpresaAdd): Promise<EmpresaAdd> {
     const response = await api.post(ENDPOINTS.EMPRESAS, empresa)

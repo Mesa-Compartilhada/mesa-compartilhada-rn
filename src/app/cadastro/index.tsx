@@ -1,9 +1,9 @@
-import InputDefault from "@/components/inputs/inputDefault";
-import { Colors } from "@/constants/Colors";
+import InputDefault from "@/src/components/inputs/inputDefault";
+import { Colors } from "@/src/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import Logo from "@/assets/images/mc_logo_fruteira.svg"
-import ButtonDefault from "@/components/buttons/buttonDefault";
+import Logo from "@/src/assets/images/mc_logo_fruteira.svg"
+import ButtonDefault from "@/src/components/buttons/buttonDefault";
 
 import { Formik } from "formik"
 import * as yup from "yup"

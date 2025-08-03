@@ -1,5 +1,5 @@
 import { Text, View } from "react-native"
-import ButtonDefault from "@/components/buttons/buttonDefault"
+import ButtonDefault from "@/src/components/buttons/buttonDefault"
 import { navigate } from "expo-router/build/global-state/routing"
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons"
 

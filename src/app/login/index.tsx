@@ -1,13 +1,13 @@
-import InputDefault from "@/components/inputs/inputDefault";
-import { Colors } from "@/constants/Colors";
+import InputDefault from "@/src/components/inputs/inputDefault";
+import { Colors } from "@/src/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { View, KeyboardAvoidingView, Platform, Text } from "react-native";
-import ButtonDefault from "@/components/buttons/buttonDefault";
-import { login as loginEmpresa } from "@/api/services/authService"
+import ButtonDefault from "@/src/components/buttons/buttonDefault";
+import { login as loginEmpresa } from "@/src/api/services/authService"
 
 import { Formik } from "formik"
 import * as yup from "yup"
-import { getToken, saveToken } from "@/storage/secureStore";
+import { getToken, saveToken } from "@/src/storage/secureStore";
 import { useEffect, useState } from "react";
 
 const schema = yup.object().shape({

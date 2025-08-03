@@ -1,7 +1,7 @@
 import '@/global.css';
 import { Stack } from 'expo-router';
-import Logo from '@/assets/images/mc_logo_fruteira.svg'
-import CustomHeader from '@/components/header/customHeader';
+import Logo from '@/src/assets/images/mc_logo_fruteira.svg'
+import CustomHeader from '@/src/components/header/customHeader';
 import { View } from 'react-native';
 
 export default function RootLayout() {

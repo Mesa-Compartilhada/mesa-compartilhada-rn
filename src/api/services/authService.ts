@@ -1,6 +1,6 @@
-import { JwtToken } from "@/types/jwtToken";
+import { JwtToken } from "@/src/types/jwtToken";
 import api from "../axios";
-import { EmpresaLogin } from "@/types/empresa";
+import { EmpresaLogin } from "@/src/types/empresa";
 import ENDPOINTS from "../endpoints";
 
 export async function login(loginInfo: EmpresaLogin): Promise<JwtToken> {

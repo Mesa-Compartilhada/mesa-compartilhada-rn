@@ -1,7 +1,7 @@
 import InputDefault from "@/src/components/inputs/inputDefault";
 import { Colors } from "@/src/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { View, KeyboardAvoidingView, Platform, Text } from "react-native";
+import { View, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import ButtonDefault from "@/src/components/buttons/buttonDefault";
 import { login as loginEmpresa } from "@/src/api/services/authService"
 
@@ -34,6 +34,8 @@ export default function Login() {
             senha: ""
         }}
         validationSchema={schema}
+        validateOnChange={false}
+        validateOnBlur={true}      
         onSubmit={ values => {
             login(values.email, values.senha)
         }}>
@@ -43,49 +45,56 @@ export default function Login() {
                 touched,
                 isValid,
                 handleChange,
-                handleSubmit
+                handleSubmit,
+                handleBlur
             }) => (
-                <KeyboardAvoidingView 
-                    className="self-center w-full px-4 my-4"
-                    behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-                >
-                    <View className="h-3/4 my-2 gap-4"> 
-                        <InputDefault 
-                            value={values.email}
-                            onChangeText={handleChange("email")}
-                            Icon={ 
-                                <MaterialIcons 
-                                name="email" 
-                                color={Colors.azul} 
-                            size={24} />} 
-                            placeholder="exemplo@gmail.com"
-                            error={errors.email}
-                            autoCapitalize="none" 
-                        />
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    <KeyboardAvoidingView 
+                        className="self-center w-full px-4 my-4"
+                        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+                    >
+                        <View className="h-3/4 my-2 gap-4"> 
+                            <InputDefault 
+                                value={values.email}
+                                onChangeText={handleChange("email")}
+                                Icon={ 
+                                    <MaterialIcons 
+                                    name="email" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="exemplo@gmail.com"
+                                error={errors.email}
+                                autoCapitalize="none" 
+                                onBlur={handleBlur("email")}
+                                
+                            />
 
-                        <InputDefault 
-                            value={values.senha}
-                            onChangeText={handleChange("senha")}
-                            Icon={
-                                <MaterialIcons 
-                                name="password" 
-                                color={Colors.azul} 
-                            size={24} />} 
-                            placeholder="******" 
-                            error={errors.senha}
-                            secureTextEntry={true}
-                            autoCapitalize="none"
-                        />
-                    </ View>
+                            <InputDefault 
+                                value={values.senha}
+                                onChangeText={handleChange("senha")}
+                                Icon={
+                                    <MaterialIcons 
+                                    name="password" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="******" 
+                                error={errors.senha}
+                                secureTextEntry={true}
+                                autoCapitalize="none"
+                                onBlur={handleBlur("senha")}
+                                
+                            />
+                        </ View>
 
-                    <View className="">
-                        <ButtonDefault 
-                            icon={<MaterialIcons name="login" size={24} color={"white"} />}
-                            title="Entrar"
-                            onPress={handleSubmit as any} // handleSubmit sem 'as any' causa um erro de tipagem, apesar de não afetar o funcionamento
-                        />
-                    </View>
-                </KeyboardAvoidingView>
+                        <View className="">
+                            <ButtonDefault 
+                                icon={<MaterialIcons name="login" size={24} color={"white"} />}
+                                title="Entrar"
+                                onPress={handleSubmit as any} // handleSubmit sem 'as any' causa um erro de tipagem, apesar de não afetar o funcionamento
+                            />
+                        </View>
+                    </KeyboardAvoidingView>
+                </TouchableWithoutFeedback>
             )
             }
         </Formik>

@@ -50,6 +50,8 @@ export default function Cadastro() {
             confirmacaoDeSenha: ""
         }}
         validationSchema={schema}
+        validateOnChange={false}
+        validateOnBlur={true} 
         onSubmit={ values => {
             cadastro(values.cnpj, values.nome, values.email, values.senha)
         }}>
@@ -59,20 +61,23 @@ export default function Cadastro() {
                 touched,
                 isValid,
                 handleChange,
+                handleBlur,
                 handleSubmit
             }) => (
                 <KeyboardAvoidingView 
-                    className="self-center w-full px-4 my-4"
+                    className="flex-1 w-full px-4 my-4"
                     behavior={Platform.OS == 'ios' ? 'padding' : 'height'}    
                 >
-                    <View className="h-3/4 my-2 gap-4">
+                    <View className="flex-1 flex-col justify-between">
+                        <View>
                         <View>
                             <InputDefault 
                                 value={values.cnpj}
                                 onChangeText={handleChange("cnpj")}
+                                onBlur={handleBlur("cnpj")}
                                 Icon={ 
                                     <MaterialIcons 
-                                    name="perm-identity" 
+                                    name="map"
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="000-0000"
@@ -85,6 +90,7 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.nome}
                                 onChangeText={handleChange("nome")}
+                                onBlur={handleBlur("nome")}
                                 Icon={ 
                                     <MaterialIcons 
                                     name="account-circle" 
@@ -100,6 +106,7 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.email}
                                 onChangeText={handleChange("email")}
+                                onBlur={handleBlur("email")}
                                 Icon={ 
                                     <MaterialIcons 
                                     name="email" 
@@ -115,6 +122,7 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.senha}
                                 onChangeText={handleChange("senha")}
+                                onBlur={handleBlur("senha")}
                                 Icon={
                                     <MaterialIcons 
                                     name="password" 
@@ -122,8 +130,8 @@ export default function Cadastro() {
                                 size={24} />} 
                                 placeholder="******" 
                                 error={errors.senha}
-                                secureTextEntry={true}
                                 autoCapitalize="none"
+                                isPassword={true}
                                 />
                         </View>
                         
@@ -131,6 +139,7 @@ export default function Cadastro() {
                             <InputDefault 
                                 value={values.confirmacaoDeSenha}
                                 onChangeText={handleChange("confirmacaoDeSenha")}
+                                onBlur={handleBlur("confirmacaoDeSenha")}
                                 Icon={
                                     <MaterialIcons 
                                     name="password" 
@@ -138,12 +147,13 @@ export default function Cadastro() {
                                 size={24} />} 
                                 placeholder="******" 
                                 error={errors.confirmacaoDeSenha}
-                                secureTextEntry={true}
                                 autoCapitalize="none"
+                                isPassword={true}
                                 />
                         </View>
+                        </View>
                     </View>
-                    <View className="">
+                    <View className="mb-8">
                         <ButtonDefault 
                             icon={<MaterialIcons name="login" size={24} color={"white"} />}
                             title="Cadastrar"

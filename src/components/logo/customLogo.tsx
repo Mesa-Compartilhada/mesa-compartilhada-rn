@@ -1,15 +1,15 @@
 import { Text, View } from "react-native"
+import Logo from "@/src/assets/images/mc_logo_fruteira.svg"
 
 type Props = {
-    icon: React.ReactElement,
-    title: string
+    title?: string
     direction?: "row" | "column",
 }
 
-export default function CustomLogo({ icon, title, direction = "row" }: Props) {
+export default function CustomLogo({title, direction = "row" }: Props) {
     return (
         <View className={`flex-${direction} items-center`}>
-            { icon }
+            <Logo />            
             <Text className="text-4xl font-bold">{ title }</Text>
         </View>
     )

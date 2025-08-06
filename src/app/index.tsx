@@ -7,7 +7,7 @@ import Logo from "@/src/assets/images/mc_logo_fruteira.svg"
 export default function Home() {
     return (
         <View className="p-6 gap-4 justify-center flex-1">
-            <CustomLogo icon={<Logo />} title="Mesa Compartilhada" direction="column"/>
+            <CustomLogo title="Mesa Compartilhada" direction="column"/>
             <Text className="text-lg text-center">Faça login ou crie uma conta para continuar</Text>
             <ButtonDefault 
                 icon={<MaterialIcons

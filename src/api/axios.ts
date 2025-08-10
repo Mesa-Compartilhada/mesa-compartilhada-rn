@@ -4,10 +4,11 @@ import axios from "axios"
 // EXPO_PUBLIC_MC_API_URL vai localmente no .env
 const api = axios.create({
     baseURL: process.env.EXPO_PUBLIC_MC_API_URL,
-    timeout: 10000,
+    timeout: 1000,
     headers: {
         'Content-Type': 'application/json'
-    }
+    },
+    validateStatus: status => (status < 500)
 })
 
 api.interceptors.response.use(

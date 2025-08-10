@@ -1,6 +1,6 @@
 import ENDPOINTS from "../endpoints";
 import api from "../axios";
-import { Doacao, DoacaoAdd, DoacaoFilter, DoacaoUpdateState } from "@/types/doacao";
+import { Doacao, DoacaoAdd, DoacaoFilter, DoacaoUpdateState } from "@/src/types/doacao";
 
 export async function addDoacao(doacao: DoacaoAdd): Promise<Doacao> {
     const response = await api.post(ENDPOINTS.DOACOES, doacao)

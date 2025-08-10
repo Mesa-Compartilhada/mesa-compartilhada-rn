@@ -1,4 +1,4 @@
-import { EnderecoAdd } from "@/types/endereco";
+import { EnderecoAdd } from "@/src/types/endereco";
 import ENDPOINTS from "../endpoints";
 import api from "../axios";
 

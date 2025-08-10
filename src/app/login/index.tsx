@@ -5,12 +5,12 @@ import { View, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, K
 import ButtonDefault from "@/src/components/buttons/buttonDefault";
 import { login as loginEmpresa } from "@/src/api/services/authService"
 
-import { Formik } from "formik"
+import { Formik, FormikProps, FormikValues } from "formik"
 import * as yup from "yup"
 import { saveToken } from "@/src/storage/secureStore";
 import CustomLogo from "@/src/components/logo/customLogo";
-import { Link } from "expo-router";
-import { useState } from "react";
+import { Link, useRouter } from "expo-router";
+import { useRef, useState } from "react";
 
 const schema = yup.object().shape({
     email: yup.string()
@@ -20,8 +20,15 @@ const schema = yup.object().shape({
         .required("É necessário digitar sua senha")
 })
 
+type loginValues = {
+    email: string,
+    senha: string
+}
+
 export default function Login() {
     const [message, setMessage] = useState("")
+    const router = useRouter()
+    const formikRef = useRef<FormikProps<loginValues>>(null)
 
     async function login(email: string, senha: string) {
         const response = await loginEmpresa({
@@ -30,12 +37,15 @@ export default function Login() {
         })
         if(response.status) {
             saveToken(response.data.token)
+            formikRef.current?.resetForm()
+            router.navigate("/dashboard")
         }
         setMessage(response.message)
     }
 
     return (
         <Formik
+        innerRef={formikRef}
         initialValues={{
             email: "",
             senha: ""

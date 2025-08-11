@@ -7,6 +7,13 @@ import ButtonDefault from "@/src/components/buttons/buttonDefault";
 import { Formik } from "formik"
 import * as yup from "yup"
 import PickerDefault from "@/src/components/inputs/pickerDefault";
+import axios from "axios";
+import { EmpresaAdd } from "@/src/types/empresa";
+import { addEndereco } from "@/src/api/services/enderecoService";
+import { EnderecoAdd } from "@/src/types/endereco";
+import { addEmpresa } from "@/src/api/services/empresaServices";
+
+const API_CEP_URL = "https://cep.awesomeapi.com.br/json"
 
 const schema = yup.object().shape({
     cnpj: yup.string()
@@ -27,11 +34,21 @@ const schema = yup.object().shape({
         .min(8, "Muito curta. Mínimo: 8 caracteres")
         .oneOf([yup.ref("senha")], "As senhas devem coincidir")
         .required("É necessário confirmar sua senha"),
-    tipo: yup.string()
+    tipo: yup.number()
         .required("Selecione o tipo de empresa"),
-    status: yup.string(),
-    categoria: yup.string()
+    categoria: yup.number()
         .required("Selecione a categoria de empresa"),
+    cep: yup.string()
+        .required(""),
+    numero: yup.string(),
+    logradouro: yup.string(),
+    bairro: yup.string(),
+    cidade: yup.string(),
+    estado: yup.string(),
+    pais: yup.string(),
+    complemento: yup.string(),
+    latitude: yup.string(),
+    longitude: yup.string()
 })
 
 export default function Cadastro() {
@@ -55,8 +72,27 @@ export default function Cadastro() {
         { key: "5", value: "Fastfood" },
         { key: "6", value: "Adega" }
     ]
-
-    function cadastro(cnpj: string, nome: string, email: string, senha: string) {
+ 
+    async function cadastro(
+        cnpj: string,
+        nome: string,
+        email: string,
+        senha: string,
+        tipo: string,
+        categoria: string,
+        cep: string,
+        numero: string,
+        logradouro: string,
+        bairro: string,
+        cidade: string,
+        estado: string,
+        pais: string,
+        latitude: number,
+        longitude: number
+    ) {
+        const enderecoResponse = await addEndereco({ cep, numero, logradouro, bairro, cidade, estado, pais, latitude, longitude })
+        const empresaResponse = await addEmpresa({ cnpj, nome, email, senha, tipo: parseInt(tipo), categoria: parseInt(categoria), enderecoId: enderecoResponse.id })
+        console.warn(empresaResponse)
     }
 
     return (
@@ -67,15 +103,40 @@ export default function Cadastro() {
             email: "",
             senha: "",
             confirmacaoDeSenha: "",
-            tipo: tiposEmpresa[0].key,
-            categoria: "1"
+            tipo: "1",
+            categoria: "1",
+            cep: "",
+            numero: "",
+            logradouro: "",
+            bairro: "",
+            cidade: "",
+            estado: "",
+            pais: "",
+            complemento: "",
+            latitude: 0,
+            longitude: 0
         }}
         validationSchema={schema}
         validateOnChange={false}
         validateOnBlur={true} 
         onSubmit={ values => {
-            console.warn(values)
-            cadastro(values.cnpj, values.nome, values.email, values.senha)
+            cadastro(
+                values.cnpj,
+                values.nome,
+                values.email,
+                values.senha,
+                values.tipo,
+                values.categoria,
+                values.cep,
+                values.numero,
+                values.logradouro,
+                values.bairro,
+                values.cidade,
+                values.estado,
+                values.pais,
+                values.latitude,
+                values.longitude
+            )
         }}>
             {({ 
                 values,
@@ -177,6 +238,55 @@ export default function Cadastro() {
 
                         <PickerDefault values={tiposEmpresa} onChange={(key) => setFieldValue("tipo", key)} />
                         <PickerDefault values={values.tipo === "1" ? categoriasEstabelecimento : categoriasInstituicao} onChange={(key) => setFieldValue("categoria", key)} />
+
+                        <View>
+                            <InputDefault 
+                                value={values.cep}
+                                onChange={async (e) => {
+                                    if(e.nativeEvent.text.length === 8) {
+                                        try {
+                                            const response = await axios.get(`${API_CEP_URL}/${e.nativeEvent.text}`)
+                                            setFieldValue("logradouro", response.data.address)
+                                            setFieldValue("bairro", response.data.district)
+                                            setFieldValue("cidade", response.data.city)
+                                            setFieldValue("estado", response.data.state)
+                                            setFieldValue("pais", "Brasil")
+                                            setFieldValue("latitude", parseFloat(response.data.lat))
+                                            setFieldValue("longitude", parseFloat(response.data.lng))
+                                        } catch(error) {
+                                            console.warn(error)
+                                        }
+                                    }
+                                }}
+                                onChangeText={handleChange("cep")}
+                                onBlur={handleBlur("cep")}
+                                Icon={
+                                    <MaterialIcons 
+                                    name="location-city" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="00000000" 
+                                error={errors.cep}
+                                autoCapitalize="none"
+                                keyboardType="number-pad"
+                            />
+                        </View>
+
+                        <View>
+                            <InputDefault 
+                                value={values.numero}
+                                onChangeText={handleChange("numero")}
+                                onBlur={handleBlur("numero")}
+                                Icon={
+                                    <MaterialIcons 
+                                    name="home" 
+                                    color={Colors.azul} 
+                                size={24} />} 
+                                placeholder="000" 
+                                error={errors.numero}
+                                autoCapitalize="none"
+                                />
+                        </View>
 
                         </View>
                     </View>

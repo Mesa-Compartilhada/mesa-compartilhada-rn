@@ -17,7 +17,7 @@ export type EmpresaAdd = {
     categoria: number,
     nome: string,
     email: string,
-    status: string,
+    senha: string,
     enderecoId: string
 }
 

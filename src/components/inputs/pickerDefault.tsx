@@ -2,21 +2,23 @@ import { Picker } from "@react-native-picker/picker"
 import React, { useState } from "react"
 
 type Props = {
-    values: string[]
+    values: { key: string, value: string }[],
+    onChange: (key: string) => void
 }
 
-export default function PickerDefault({ values }: Props) {
-    const [selectedValue, setSelectedValue] = useState()
+export default function PickerDefault({ values, onChange }: Props) {
+    const [selectedValue, setSelectedValue] = useState<{ key: string, value: string }>(values[0])
     return (
         <Picker
-            selectedValue={selectedValue}
+            selectedValue={selectedValue.key}
             onValueChange={(itemValue, itemIndex) => {
-                setSelectedValue(itemValue)
+                setSelectedValue(values[itemIndex])
+                onChange(itemValue)
             }}
         >
             {
                 values.map((item) => (
-                    <Picker.Item label={item} value={item} />
+                    <Picker.Item label={item.value} value={item.key} />
                 ))
             }
         </Picker>

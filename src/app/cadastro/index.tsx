@@ -6,7 +6,7 @@ import ButtonDefault from "@/src/components/buttons/buttonDefault";
 
 import { Formik } from "formik"
 import * as yup from "yup"
-import { useState } from "react";
+import PickerDefault from "@/src/components/inputs/pickerDefault";
 
 const schema = yup.object().shape({
     cnpj: yup.string()
@@ -26,14 +26,16 @@ const schema = yup.object().shape({
     confirmacaoDeSenha: yup.string()
         .min(8, "Muito curta. Mínimo: 8 caracteres")
         .oneOf([yup.ref("senha")], "As senhas devem coincidir")
-        .required("É necessário confirmar sua senha")
+        .required("É necessário confirmar sua senha"),
+    tipoEmpresa: yup.string()
+        .required("Selecione o tipo de empresa")
 })
 
 export default function Cadastro() {
-    const [tipoEmpresa, setTipoEmpresa] = useState([
-        "Doadora",
-        "Recebedora"
-    ])
+    const tiposEmpresa = [
+        { key: "0", value: "Doadora" },
+        { key: "1", value: "Recebedora" }
+    ]
 
     function cadastro(cnpj: string, nome: string, email: string, senha: string) {
         console.log(cnpj, nome, email, senha)
@@ -46,12 +48,14 @@ export default function Cadastro() {
             nome: "",
             email: "",
             senha: "",
-            confirmacaoDeSenha: ""
+            confirmacaoDeSenha: "",
+            tipoEmpresa: tiposEmpresa[0].key
         }}
         validationSchema={schema}
         validateOnChange={false}
         validateOnBlur={true} 
         onSubmit={ values => {
+            console.warn(values)
             cadastro(values.cnpj, values.nome, values.email, values.senha)
         }}>
             {({ 
@@ -61,7 +65,8 @@ export default function Cadastro() {
                 isValid,
                 handleChange,
                 handleBlur,
-                handleSubmit
+                handleSubmit,
+                setFieldValue
             }) => (
                 <KeyboardAvoidingView 
                     className="flex-1 w-full px-4 my-4"
@@ -150,6 +155,8 @@ export default function Cadastro() {
                                 isPassword={true}
                                 />
                         </View>
+
+                        <PickerDefault values={tiposEmpresa} onChange={(key) => setFieldValue("tipoEmpresa", key)} />
                         </View>
                     </View>
                     <View className="mb-8">

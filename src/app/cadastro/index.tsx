@@ -1,7 +1,7 @@
 import InputDefault from "@/src/components/inputs/inputDefault";
 import { Colors } from "@/src/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { View, KeyboardAvoidingView, Platform } from "react-native";
+import { View, KeyboardAvoidingView, Platform, Text } from "react-native";
 import ButtonDefault from "@/src/components/buttons/buttonDefault";
 
 import { Formik } from "formik"
@@ -27,18 +27,36 @@ const schema = yup.object().shape({
         .min(8, "Muito curta. Mínimo: 8 caracteres")
         .oneOf([yup.ref("senha")], "As senhas devem coincidir")
         .required("É necessário confirmar sua senha"),
-    tipoEmpresa: yup.string()
-        .required("Selecione o tipo de empresa")
+    tipo: yup.string()
+        .required("Selecione o tipo de empresa"),
+    status: yup.string(),
+    categoria: yup.string()
+        .required("Selecione a categoria de empresa"),
 })
 
 export default function Cadastro() {
     const tiposEmpresa = [
-        { key: "0", value: "Doadora" },
-        { key: "1", value: "Recebedora" }
+        { key: "1", value: "Doadora" },
+        { key: "2", value: "Recebedora" }
+    ]
+    
+    const categoriasInstituicao = [
+        { key: "1", value: "ONG" },
+        { key: "2", value: "OSC" },
+        { key: "3", value: "Religiosa" },
+        { key: "4", value: "Banco de alimentos" },
+    ]
+    
+    const categoriasEstabelecimento = [
+        { key: "1", value: "Restaurante" },
+        { key: "2", value: "Hortifrutti" },
+        { key: "3", value: "Mercado" },
+        { key: "4", value: "Padaria" },
+        { key: "5", value: "Fastfood" },
+        { key: "6", value: "Adega" }
     ]
 
     function cadastro(cnpj: string, nome: string, email: string, senha: string) {
-        console.log(cnpj, nome, email, senha)
     }
 
     return (
@@ -49,7 +67,8 @@ export default function Cadastro() {
             email: "",
             senha: "",
             confirmacaoDeSenha: "",
-            tipoEmpresa: tiposEmpresa[0].key
+            tipo: tiposEmpresa[0].key,
+            categoria: "1"
         }}
         validationSchema={schema}
         validateOnChange={false}
@@ -156,7 +175,9 @@ export default function Cadastro() {
                                 />
                         </View>
 
-                        <PickerDefault values={tiposEmpresa} onChange={(key) => setFieldValue("tipoEmpresa", key)} />
+                        <PickerDefault values={tiposEmpresa} onChange={(key) => setFieldValue("tipo", key)} />
+                        <PickerDefault values={values.tipo === "1" ? categoriasEstabelecimento : categoriasInstituicao} onChange={(key) => setFieldValue("categoria", key)} />
+
                         </View>
                     </View>
                     <View className="mb-8">

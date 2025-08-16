@@ -35,39 +35,3 @@ export async function deleteToken() {
         return false
     }
 }
-
-export async function saveUser(user: Empresa) {
-    try {
-        await SecureStore.setItemAsync("USER", JSON.stringify(user))
-        return true
-    }
-    catch(error) {
-        console.log(error)
-        return false
-    }
-}
-
-export async function getUser() {
-    try {
-        const user = await SecureStore.getItemAsync("USER")
-        if(user) {
-            return JSON.parse(user) as EmpresaAdd
-        }
-        return
-    }
-    catch(error) {
-        console.log(error)
-        return false
-    }
-}
-
-export async function deleteUser() {
-    try {
-        await SecureStore.deleteItemAsync("USER")
-        return true
-    }
-    catch(error) {
-        console.log(error)
-        return false
-    }
-}

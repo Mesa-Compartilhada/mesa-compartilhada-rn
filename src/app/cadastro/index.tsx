@@ -8,9 +8,7 @@ import { Formik } from "formik"
 import * as yup from "yup"
 import PickerDefault from "@/src/components/inputs/pickerDefault";
 import axios from "axios";
-import { EmpresaAdd } from "@/src/types/empresa";
 import { addEndereco } from "@/src/api/services/enderecoService";
-import { EnderecoAdd } from "@/src/types/endereco";
 import { addEmpresa } from "@/src/api/services/empresaServices";
 
 const API_CEP_URL = "https://cep.awesomeapi.com.br/json"

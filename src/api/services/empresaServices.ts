@@ -1,7 +1,7 @@
 import ENDPOINTS from "../endpoints";
 import api from "../axios";
 import { Empresa, EmpresaAdd, EmpresaUpdate } from "@/src/types/empresa";
-import { getToken, saveUser } from "@/src/storage/secureStore";
+import { getToken } from "@/src/storage/secureStore";
 
 export async function addEmpresa(empresa: EmpresaAdd) {
     try {
@@ -37,8 +37,7 @@ export async function getMe() {
                     Authorization: `Bearer ${jwt}`,
                 }
             })
-            saveUser(response.data.user)
-            return response.data
+            return response
         } catch(error) {
             console.log(error)
         }

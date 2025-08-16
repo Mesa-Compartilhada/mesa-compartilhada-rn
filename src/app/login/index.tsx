@@ -3,14 +3,13 @@ import { Colors } from "@/src/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { View, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import ButtonDefault from "@/src/components/buttons/buttonDefault";
-import { login as loginEmpresa } from "@/src/api/services/authService"
 
 import { Formik, FormikProps, FormikValues } from "formik"
 import * as yup from "yup"
-import { saveToken } from "@/src/storage/secureStore";
 import CustomLogo from "@/src/components/logo/customLogo";
 import { Link, useRouter } from "expo-router";
 import { useRef, useState } from "react";
+import { useAuth } from "@/src/context/AuthContext";
 
 const schema = yup.object().shape({
     email: yup.string()
@@ -30,17 +29,20 @@ export default function Login() {
     const router = useRouter()
     const formikRef = useRef<FormikProps<loginValues>>(null)
 
+    const { loginUser } = useAuth()
+
     async function login(email: string, senha: string) {
-        const response = await loginEmpresa({
+        const response = await loginUser({
             email: email,
             senha: senha
         })
-        if(response.status) {
-            saveToken(response.data.token)
-            formikRef.current?.resetForm()
-            router.navigate("/dashboard")
+        if(response) {
+            setMessage(response?.message)
+            if(response.status) {
+                formikRef.current?.resetForm()
+                router.navigate("/dashboard")
+            }
         }
-        setMessage(response.message)
     }
 
     return (

@@ -47,19 +47,19 @@ export type DoacaoUpdateState = {
 }
 
 export type DoacaoFilter = {
-    status: string[],
-    dataFabricacaoMin: string,
-    dataFabricacaoMax: string,
-    dataValidadeMin: string,
-    dataValidadeMax: string,
-    dataCriadaMin: string,
-    dataCriadaMax: string,
-    dataEncerradaMin: string,
-    dataEncerradaMax: string,
-    dataRetiradaMin: string,
-    dataRetiradaMax: string,
-    tipoAlimento: number[],
-    tipoArmazenamento: number[],
-    empresaDoadoraId: string,
-    empresaRecebedoraId: string
+    status?: string[],
+    dataFabricacaoMin?: string,
+    dataFabricacaoMax?: string,
+    dataValidadeMin?: string,
+    dataValidadeMax?: string,
+    dataCriadaMin?: string,
+    dataCriadaMax?: string,
+    dataEncerradaMin?: string,
+    dataEncerradaMax?: string,
+    dataRetiradaMin?: string,
+    dataRetiradaMax?: string,
+    tipoAlimento?: number[],
+    tipoArmazenamento?: number[],
+    empresaDoadoraId?: string,
+    empresaRecebedoraId?: string
 }

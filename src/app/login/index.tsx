@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { View, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import ButtonDefault from "@/src/components/buttons/buttonDefault";
 
-import { Formik, FormikProps, FormikValues } from "formik"
+import { Formik, FormikProps } from "formik"
 import * as yup from "yup"
 import CustomLogo from "@/src/components/logo/customLogo";
 import { Link, useRouter } from "expo-router";

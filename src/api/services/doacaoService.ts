@@ -28,7 +28,6 @@ export async function getDoacaoByFilter(filtros: DoacaoFilter) {
                     Authorization: `Bearer ${jwt}`
                 }
             })
-            console.log(response.data)
             return response.data
         } catch(error) {
             console.warn(error)

@@ -23,7 +23,7 @@ export function DoacoesList({ filters }: Props) {
     }, [])
 
     useEffect(() => {
-        if(doacoes.length >= 1) {
+        if(doacoes && doacoes.length >= 1) {
             setIsLoading(false)
         }
     }, [doacoes])

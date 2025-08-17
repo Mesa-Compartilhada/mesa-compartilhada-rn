@@ -49,8 +49,6 @@ export const AuthProvider = ({ children }: TAuthProvider) => {
             }
         }
         fetchToken()
-        console.warn(isLoggedIn)
-        console.warn(userInfo)
     }, [])
 
     const loginUser = async (user: EmpresaLogin) => {

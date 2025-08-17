@@ -10,6 +10,8 @@ import PickerDefault from "@/src/components/inputs/pickerDefault";
 import axios from "axios";
 import { addEndereco } from "@/src/api/services/enderecoService";
 import { addEmpresa } from "@/src/api/services/empresaServices";
+import { ScrollView } from "react-native-gesture-handler";
+import { useRouter } from "expo-router";
 
 const API_CEP_URL = "https://cep.awesomeapi.com.br/json"
 
@@ -50,6 +52,8 @@ const schema = yup.object().shape({
 })
 
 export default function Cadastro() {
+    const router = useRouter()
+
     const tiposEmpresa = [
         { key: "1", value: "Doadora" },
         { key: "2", value: "Recebedora" }
@@ -90,7 +94,9 @@ export default function Cadastro() {
     ) {
         const enderecoResponse = await addEndereco({ cep, numero, logradouro, bairro, cidade, estado, pais, latitude, longitude })
         const empresaResponse = await addEmpresa({ cnpj, nome, email, senha, tipo: parseInt(tipo), categoria: parseInt(categoria), enderecoId: enderecoResponse.id })
-        console.warn(empresaResponse)
+        if(empresaResponse?.status) {
+            router.navigate("/login")
+        }
     }
 
     return (
@@ -147,11 +153,10 @@ export default function Cadastro() {
                 setFieldValue
             }) => (
                 <KeyboardAvoidingView 
-                    className="flex-1 w-full px-4 my-4"
+                    className="flex-1 w-full px-4"
                     behavior={Platform.OS == 'ios' ? 'padding' : 'height'}    
                 >
-                    <View className="flex-1 flex-col justify-between">
-                        <View>
+                    <ScrollView className="flex-1 flex-col p-4">
                         <View>
                             <InputDefault 
                                 value={values.cnpj}
@@ -162,7 +167,7 @@ export default function Cadastro() {
                                     name="map"
                                     color={Colors.azul} 
                                 size={24} />} 
-                                placeholder="000-0000"
+                                placeholder="00.000.000/0000-00"
                                 error={ touched.cnpj ? errors.cnpj : undefined}
                                 autoCapitalize="none" 
                                 />
@@ -285,9 +290,7 @@ export default function Cadastro() {
                                 autoCapitalize="none"
                                 />
                         </View>
-
-                        </View>
-                    </View>
+                    </ScrollView>
                     <View className="mb-8">
                         <ButtonDefault 
                             icon={<MaterialIcons name="login" size={24} color={"white"} />}

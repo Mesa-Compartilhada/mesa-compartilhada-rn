@@ -17,8 +17,8 @@ export default function PickerDefault({ values, onChange }: Props) {
             }}
         >
             {
-                values.map((item) => (
-                    <Picker.Item label={item.value} value={item.key} />
+                values.map((item, index) => (
+                    <Picker.Item key={index} label={item.value} value={item.key} />
                 ))
             }
         </Picker>

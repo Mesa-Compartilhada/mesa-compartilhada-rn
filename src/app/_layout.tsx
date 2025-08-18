@@ -5,6 +5,7 @@ import { Drawer } from 'expo-router/drawer';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { PaperProvider } from 'react-native-paper';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
     const { isLoggedIn, logoutUser } = useAuth()
@@ -64,7 +65,9 @@ function ProtectedLayout() {
 export default function RootLayout() {
     return (
         <AuthProvider>
-            <ProtectedLayout />
+            <PaperProvider>
+                <ProtectedLayout />
+            </PaperProvider>
         </AuthProvider>
     )
 }

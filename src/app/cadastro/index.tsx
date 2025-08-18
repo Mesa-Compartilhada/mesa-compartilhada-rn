@@ -12,6 +12,8 @@ import { addEndereco } from "@/src/api/services/enderecoService";
 import { addEmpresa } from "@/src/api/services/empresaServices";
 import { ScrollView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import Snackbar from "@/src/components/snackbar/Snackbar";
 
 const API_CEP_URL = "https://cep.awesomeapi.com.br/json"
 
@@ -52,6 +54,7 @@ const schema = yup.object().shape({
 })
 
 export default function Cadastro() {
+    const [msg, setMsg] = useState("")
     const router = useRouter()
 
     const tiposEmpresa = [
@@ -95,7 +98,11 @@ export default function Cadastro() {
         const enderecoResponse = await addEndereco({ cep, numero, logradouro, bairro, cidade, estado, pais, latitude, longitude })
         const empresaResponse = await addEmpresa({ cnpj, nome, email, senha, tipo: parseInt(tipo), categoria: parseInt(categoria), enderecoId: enderecoResponse.id })
         if(empresaResponse?.status) {
+            setMsg("Cadastrado com sucesso")
             router.navigate("/login")
+        }
+        else {
+            setMsg("Erro ao realizar o cadastro")
         }
     }
 
@@ -158,6 +165,7 @@ export default function Cadastro() {
                 >
                     <ScrollView className="flex-1 flex-col p-4">
                         <View>
+                            <Text className="text-lg font-bolder text-gray-700">CNPJ:</Text>
                             <InputDefault 
                                 value={values.cnpj}
                                 onChangeText={handleChange("cnpj")}
@@ -172,8 +180,9 @@ export default function Cadastro() {
                                 autoCapitalize="none" 
                                 />
                         </View>
-                        
+
                         <View>
+                            <Text className="text-lg font-bolder text-gray-700">Nome fantasia:</Text>
                             <InputDefault 
                                 value={values.nome}
                                 onChangeText={handleChange("nome")}
@@ -190,6 +199,7 @@ export default function Cadastro() {
                         </View>
                         
                         <View>
+                            <Text className="text-lg font-bolder text-gray-700">Email:</Text>
                             <InputDefault 
                                 value={values.email}
                                 onChangeText={handleChange("email")}
@@ -206,6 +216,7 @@ export default function Cadastro() {
                         </View>
                         
                         <View>
+                            <Text className="text-lg font-bolder text-gray-700">Senha:</Text>
                             <InputDefault 
                                 value={values.senha}
                                 onChangeText={handleChange("senha")}
@@ -223,6 +234,7 @@ export default function Cadastro() {
                         </View>
                         
                         <View>
+                            <Text className="text-lg font-bolder text-gray-700">Confirme sua senha:</Text>
                             <InputDefault 
                                 value={values.confirmacaoDeSenha}
                                 onChangeText={handleChange("confirmacaoDeSenha")}
@@ -239,10 +251,13 @@ export default function Cadastro() {
                                 />
                         </View>
 
+                        <Text className="text-lg font-bolder text-gray-700">Tipo da empresa:</Text>
                         <PickerDefault values={tiposEmpresa} onChange={(key) => setFieldValue("tipo", key)} />
+                        <Text className="text-lg font-bolder text-gray-700">Categoria da empresa:</Text>
                         <PickerDefault values={values.tipo === "1" ? categoriasEstabelecimento : categoriasInstituicao} onChange={(key) => setFieldValue("categoria", key)} />
 
                         <View>
+                            <Text className="text-lg font-bolder text-gray-700">CEP:</Text>
                             <InputDefault 
                                 value={values.cep}
                                 onChange={async (e) => {
@@ -276,6 +291,7 @@ export default function Cadastro() {
                         </View>
 
                         <View>
+                            <Text className="text-lg font-bolder text-gray-700">Número</Text>
                             <InputDefault 
                                 value={values.numero}
                                 onChangeText={handleChange("numero")}
@@ -295,9 +311,10 @@ export default function Cadastro() {
                         <ButtonDefault 
                             icon={<MaterialIcons name="login" size={24} color={"white"} />}
                             title="Cadastrar"
-                            onPress={handleSubmit as any} // handleSubmit sem 'as any' causa um erro de tipagem, apesar de não afetar o funcionamento
+                            onPress={() => setMsg("qwe")} // handleSubmit sem 'as any' causa um erro de tipagem, apesar de não afetar o funcionamento
                         />
                     </View>
+                    <Snackbar children={msg} visible={msg.length >= 1} onDismiss={() => { setMsg("") }} />
                 </KeyboardAvoidingView>
             )
             }

@@ -311,7 +311,7 @@ export default function Cadastro() {
                         <ButtonDefault 
                             icon={<MaterialIcons name="login" size={24} color={"white"} />}
                             title="Cadastrar"
-                            onPress={() => setMsg("qwe")} // handleSubmit sem 'as any' causa um erro de tipagem, apesar de não afetar o funcionamento
+                            onPress={handleSubmit as any} // handleSubmit sem 'as any' causa um erro de tipagem, apesar de não afetar o funcionamento
                         />
                     </View>
                     <Snackbar children={msg} visible={msg.length >= 1} onDismiss={() => { setMsg("") }} />

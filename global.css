@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btnText {
+    @apply text-azul text-xl font-bold
+}

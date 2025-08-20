@@ -7,8 +7,7 @@ export default function Dashboard() {
     const { userInfo } = useAuth()
 
     return (
-        <View>
-            <Text>Olá, { userInfo?.nome }</Text>    
+        <View>  
             <DoacoesList filters={ { status: [ "DISPONIVEL" ] } } />
         </View>
         

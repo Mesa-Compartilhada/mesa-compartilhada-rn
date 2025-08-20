@@ -20,7 +20,7 @@ export default function Perfil() {
         if(userInfo && userId && userInfo.id !== userId) {
             fetch()
         }
-    }, [userInfo])
+    }, [userId])
     
 
     if(userInfo && userInfo.id === userId) {

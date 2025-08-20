@@ -1,7 +1,7 @@
 import { getDoacaoByFilter } from "@/src/api/services/doacaoService";
 import { Doacao, DoacaoFilter } from "@/src/types/doacao";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import DoacaoCard from "./doacaoCard";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -23,9 +23,7 @@ export function DoacoesList({ filters }: Props) {
     }, [])
 
     useEffect(() => {
-        if(doacoes && doacoes.length >= 1) {
-            setIsLoading(false)
-        }
+        setIsLoading(false)
     }, [doacoes])
 
     if(isLoading) {
@@ -40,17 +38,17 @@ export function DoacoesList({ filters }: Props) {
 
     if(!isLoading && doacoes.length >= 1) {
         return (
-            <ScrollView className="h-[35%]">
-                {
-                    doacoes.length >= 1
-                    &&
-                    doacoes.map((item, index) => (
-                        <View key={index} className="m-4">
-                            <DoacaoCard doacao={item} />
-                        </View>
-                    ))
-                }
-            </ScrollView>
+            <FlatList
+                data={doacoes}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View className="m-4">
+                        <DoacaoCard doacao={item} />
+                    </View>
+                )}
+            >
+
+            </FlatList>
         )
     }
     else if(!isLoading && doacoes.length === 0) {

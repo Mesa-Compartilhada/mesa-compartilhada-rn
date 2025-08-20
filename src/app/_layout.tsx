@@ -17,7 +17,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             <View className='bg-purple-400 rounded-lg p-2 my-8 flex flex-row items-center gap-4'
                 onTouchEnd={() => {    
                     if(userInfo) {
-                        router.push({pathname: '/perfil', params: { userId: userInfo ? userInfo.id : undefined }})
+                        router.push({pathname: '/perfil/[userId]', params: { userId: userInfo ? userInfo.id : undefined }})
                     }
                     else {
                         router.push({pathname: '/login'})
@@ -70,7 +70,7 @@ function ProtectedLayout() {
                     <Drawer.Screen name='dashboard/index' options={{ title: "Dashboard", 
                         drawerIcon: ({color, size}) => <MaterialIcons name='dashboard' size={size} color={color} /> }} 
                     />
-                    <Drawer.Screen name='perfil/index' initialParams={{ userId: userInfo ? userInfo.id : undefined }} options={{ title: "Meu Perfil", 
+                    <Drawer.Screen name='perfil/[userId]' initialParams={{ userId: userInfo ? userInfo.id : undefined }} options={{ title: "Meu Perfil", 
                         drawerIcon: (({color, size}) => <MaterialIcons name='account-circle' size={size} color={color} />)
                     }} />
                 </Drawer.Protected>

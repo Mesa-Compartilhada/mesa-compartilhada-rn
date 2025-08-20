@@ -1,8 +1,8 @@
 import { TouchableOpacity, TouchableOpacityProps, Text } from "react-native";
 
 type Props = {
-    title: string,
-    icon: React.ReactElement
+    title?: string,
+    icon?: React.ReactElement
 } & TouchableOpacityProps
 
 export default function ButtonDefault({ title, icon, ...rest }: Props) {

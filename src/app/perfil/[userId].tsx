@@ -32,7 +32,7 @@ export default function Perfil() {
     }
     else if(userInfo && userId && user && userInfo.id !== userId) {
         return (
-            <View>
+            <View className="mt-10">
                 <PerfilCard user={user} />
             </View>            
         )

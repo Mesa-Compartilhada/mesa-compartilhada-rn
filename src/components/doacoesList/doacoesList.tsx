@@ -10,7 +10,7 @@ type Props = {
 }
 
 export function DoacoesList({ filters }: Props) {
-    const [doacoes, setDoacoes] = useState<Doacao[]>([])
+    const [doacoes, setDoacoes] = useState<Doacao[] | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -23,7 +23,9 @@ export function DoacoesList({ filters }: Props) {
     }, [])
 
     useEffect(() => {
-        setIsLoading(false)
+        if(doacoes != null && doacoes) {
+            setIsLoading(false)
+        }
     }, [doacoes])
 
     if(isLoading) {
@@ -36,7 +38,7 @@ export function DoacoesList({ filters }: Props) {
         )
     }
 
-    if(!isLoading && doacoes.length >= 1) {
+    if(!isLoading && doacoes && doacoes.length >= 1) {
         return (
             <FlatList
                 data={doacoes}
@@ -47,11 +49,10 @@ export function DoacoesList({ filters }: Props) {
                     </View>
                 )}
             >
-
             </FlatList>
         )
     }
-    else if(!isLoading && doacoes.length === 0) {
+    else if(!isLoading && doacoes && doacoes.length === 0) {
         return (
             <View>
                 <Text>

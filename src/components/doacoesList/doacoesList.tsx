@@ -3,7 +3,6 @@ import { Doacao, DoacaoFilter } from "@/src/types/doacao";
 import { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import DoacaoCard from "./doacaoCard";
-import { ScrollView } from "react-native-gesture-handler";
 
 type Props = {
     filters: DoacaoFilter
@@ -17,7 +16,7 @@ export function DoacoesList({ filters }: Props) {
         let res: [] = []
         const fetch = async () => {
             res = await getDoacaoByFilter(filters)
-            setDoacoes(res)
+            setDoacoes(res.slice(0, 3))
         }
         fetch()
     }, [])
@@ -41,6 +40,7 @@ export function DoacoesList({ filters }: Props) {
     if(!isLoading && doacoes && doacoes.length >= 1) {
         return (
             <FlatList
+                horizontal={true}
                 data={doacoes}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (

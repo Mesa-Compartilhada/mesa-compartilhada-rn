@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .btnText {
-    @apply text-azul text-xl font-bold
+    @apply text-azul font-bold
 }

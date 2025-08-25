@@ -73,6 +73,9 @@ function ProtectedLayout() {
                     <Drawer.Screen name='perfil/[userId]' initialParams={{ userId: userInfo ? userInfo.id : undefined }} options={{ title: "Meu Perfil", 
                         drawerIcon: (({color, size}) => <MaterialIcons name='account-circle' size={size} color={color} />)
                     }} />
+                    <Drawer.Screen name="lista-doacoes/index" options={{ title: "Doações",
+                    drawerIcon: ({color, size}) => <MaterialIcons name='food-bank' size={size} color={color} />
+                    }} />
                 </Drawer.Protected>
             </Drawer>
             

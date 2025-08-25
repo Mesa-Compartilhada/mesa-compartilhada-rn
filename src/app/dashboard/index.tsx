@@ -1,8 +1,13 @@
+import InputDefault from "@/components/inputs/inputDefault";
 import { getDoacaoByFilter } from "@/src/api/services/doacaoService";
+import ButtonDefault from "@/src/components/buttons/buttonDefault";
 import DoacaoCard from "@/src/components/doacoesList/doacaoCard";
 import { DoacoesList } from "@/src/components/doacoesList/doacoesList";
+import DoacoesListCompleta from "@/src/components/doacoesList/doacoesListCompleta";
 import { useAuth } from "@/src/context/AuthContext";
 import { Doacao } from "@/src/types/doacao";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -11,6 +16,7 @@ export default function Dashboard() {
 
     const { isLoggedIn, userInfo } = useAuth()
     const [doacoes, setDoacoes] = useState<Doacao[]>()
+    const router = useRouter()
 
     useEffect(() => {
         const fetchDoacoes = async () => {
@@ -73,6 +79,17 @@ export default function Dashboard() {
                         <Text className="text-2xl">Doação para você solicitar:</Text>
                         <DoacoesList filters={ { status: [ "DISPONIVEL" ] } } />
                     </View>
+                
+                <View className="ml-auto">
+                    <ButtonDefault 
+                        title="Encontrar mais doações" 
+                        icon={<MaterialIcons name="arrow-circle-right" color={"white"} 
+                        size={24} />} 
+                        onPress={() => {
+                            router.push({ pathname: '/lista-doacoes' })
+                        }}
+                        />
+                </View>
                 </View>
             </ScrollView>
         )

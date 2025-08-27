@@ -1,9 +1,7 @@
-import InputDefault from "@/components/inputs/inputDefault";
 import { getDoacaoByFilter } from "@/src/api/services/doacaoService";
 import ButtonDefault from "@/src/components/buttons/buttonDefault";
 import DoacaoCard from "@/src/components/doacoesList/doacaoCard";
 import { DoacoesList } from "@/src/components/doacoesList/doacoesList";
-import DoacoesListCompleta from "@/src/components/doacoesList/doacoesListCompleta";
 import { useAuth } from "@/src/context/AuthContext";
 import { Doacao } from "@/src/types/doacao";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -42,14 +40,14 @@ export default function Dashboard() {
                         doacoes
                         &&
                         <>
-                            <Text className="text-2xl">Sua doação mais recente</Text>
-                            <DoacaoCard doacao={ doacoes[0] } />   
+                            <Text className="text-2xl">Sua doação mais recente:</Text>
+                            <DoacaoCard doacao={ doacoes[0] } />
                         </>
                     }
                 </View>
 
                 <View>
-                    <Text className="text-2xl">Suas doações em andamento</Text>
+                    <Text className="text-2xl">Suas doações em andamento:</Text>
                     <DoacoesList filters={ { status: [ "ANDAMENTO" ], empresaDoadoraId: userInfo.id } } />
                 </View>
             </ScrollView>

@@ -70,9 +70,14 @@ function ProtectedLayout() {
                     <Drawer.Screen name='dashboard/index' options={{ title: "Dashboard", 
                         drawerIcon: ({color, size}) => <MaterialIcons name='dashboard' size={size} color={color} /> }} 
                     />
-                    <Drawer.Screen name='perfil/[userId]' initialParams={{ userId: userInfo ? userInfo.id : undefined }} options={{ title: "Meu Perfil", 
-                        drawerIcon: (({color, size}) => <MaterialIcons name='account-circle' size={size} color={color} />)
-                    }} />
+                    <Drawer.Screen name='perfil/[userId]' options={{ drawerItemStyle: { display: "none" }, title: "Perfil", 
+                        drawerIcon: ({color, size}) => <MaterialIcons name='account-circle' size={size} color={color} /> }} 
+                    />
+                    <Drawer.Screen name='doacao/[doacao]' options={{ drawerItemStyle: { display: "none" }, title: "Doação", 
+                        drawerIcon: ({color, size}) => <MaterialIcons name='account-circle' size={size} color={color} /> }} 
+                    />
+                </Drawer.Protected>
+                <Drawer.Protected guard={isLoggedIn && userInfo?.tipo === "RECEBEDORA"}>
                     <Drawer.Screen name="lista-doacoes/index" options={{ title: "Doações",
                     drawerIcon: ({color, size}) => <MaterialIcons name='food-bank' size={size} color={color} />
                     }} />

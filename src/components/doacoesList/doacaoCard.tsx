@@ -31,7 +31,10 @@ export default function DoacaoCard({ doacao }: Props) {
               </Text>
               <IconButton
                 onPress={() => {
-                  
+                  router.push({
+                    pathname: '/doacao/[doacao]',
+                    params: { doacao: JSON.stringify(doacao) }
+                  })
                 }}
                 icon={<MaterialIcons name="search" size={20} color={"white"}/>}
               />

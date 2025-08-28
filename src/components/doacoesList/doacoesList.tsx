@@ -1,8 +1,11 @@
 import { getDoacaoByFilter } from "@/src/api/services/doacaoService";
 import { Doacao, DoacaoFilter } from "@/src/types/doacao";
-import { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Dimensions, FlatList, Text, View } from "react-native";
+import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
 import DoacaoCard from "./doacaoCard";
+import IconButton from "../buttons/iconButton";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type Props = {
     filters: DoacaoFilter
@@ -11,6 +14,10 @@ type Props = {
 export function DoacoesList({ filters }: Props) {
     const [doacoes, setDoacoes] = useState<Doacao[] | null>(null)
     const [isLoading, setIsLoading] = useState(true)
+
+    const carouselRef = useRef<ICarouselInstance>(null)
+
+    const { width } = Dimensions.get('window')
 
     useEffect(() => {
         let res: [] = []
@@ -39,17 +46,29 @@ export function DoacoesList({ filters }: Props) {
 
     if(!isLoading && doacoes && doacoes.length >= 1) {
         return (
-            <FlatList
-                horizontal={true}
-                data={doacoes}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <View className="m-4">
-                        <DoacaoCard doacao={item} />
-                    </View>
-                )}
-            >
-            </FlatList>
+            <View>
+                <Carousel
+                    ref={carouselRef}
+                    width={width * 0.8}
+                    loop={false}
+                    style={{ width: width }}
+                    height={150}
+                    data={doacoes}
+                    renderItem={({item}) => (
+                        <View>
+                            <DoacaoCard doacao={item} />
+                        </View>
+                    )}
+                />
+                <View className="flex-row justify-between">
+                    <IconButton icon={<MaterialIcons name="arrow-back" color="white" size={24} />} onPress={() => {
+                        carouselRef.current?.prev()
+                    }} />
+                    <IconButton icon={<MaterialIcons name="arrow-forward" color="white" size={24} />} onPress={() => {
+                        carouselRef.current?.next()
+                    }} />
+                </View>
+            </View>
         )
     }
     else if(!isLoading && doacoes && doacoes.length === 0) {

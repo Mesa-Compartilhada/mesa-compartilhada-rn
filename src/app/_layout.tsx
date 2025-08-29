@@ -76,6 +76,12 @@ function ProtectedLayout() {
                     <Drawer.Screen name='doacao/[doacao]' options={{ drawerItemStyle: { display: "none" }, title: "Doação", 
                         drawerIcon: ({color, size}) => <MaterialIcons name='account-circle' size={size} color={color} /> }} 
                     />
+                    <Drawer.Screen name='conta/index' options={{ drawerItemStyle: { display: "none" }, title: "Conta", 
+                        drawerIcon: ({color, size}) => <MaterialIcons name='settings' size={size} color={color} /> }} 
+                    />
+                    <Drawer.Screen name='configuracoes/index' options={{ title: "Configurações", 
+                        drawerIcon: ({color, size}) => <MaterialIcons name='settings' size={size} color={color} /> }} 
+                    />
                 </Drawer.Protected>
                 <Drawer.Protected guard={isLoggedIn && userInfo?.tipo === "RECEBEDORA"}>
                     <Drawer.Screen name="lista-doacoes/index" options={{ title: "Doações",

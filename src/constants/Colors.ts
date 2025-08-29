@@ -4,4 +4,5 @@ export const Colors = {
     lPessego: "#FEEAC2",
     branco: "#FFFAF0",
     azulEscuro: "#003B5D",
+    cinza: "#424242"
 }

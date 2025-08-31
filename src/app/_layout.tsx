@@ -3,7 +3,7 @@ import { AuthProvider, useAuth } from '../context/AuthContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { PaperProvider } from 'react-native-paper';
 import { useRouter } from 'expo-router';
@@ -14,7 +14,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
 
     return (
         <DrawerContentScrollView>
-            <View className={`${userInfo ? userInfo?.tipo === "DOADORA" ? "bg-lAbobora" : "bg-azul" : "bg-azulEscuro"}  "rounded-lg p-2 my-8 flex flex-row items-center gap-4"`}
+            <View className={"p-2 my-8 flex flex-row items-center gap-4"}
                 onTouchEnd={() => {    
                     if(userInfo) {
                         router.push({pathname: '/perfil/[userId]', params: { userId: userInfo ? userInfo.id : undefined }})
@@ -24,8 +24,21 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                     }
                 }}
             >
-                <MaterialIcons name='account-circle' size={75} color={"white"} />
-                <Text className='text-white'>{ userInfo ? userInfo.nome : "Acesse sua conta" }</Text>
+                <View>
+                    {userInfo?.fotoPerfil ? (
+                        <Image
+                            className="w-20 h-20 rounded-full"
+                            source={{
+                            uri: "https://res.cloudinary.com/dpokxqzzq/image/upload/v1756577882/af669sdjtka7kom0iifl.png",
+                            }}
+                        />
+                        ) : (
+                        <View className="w-20 h-20 rounded-full bg-gray-600 justify-center items-center">
+                            <MaterialIcons name="account-circle" size={70} color="white" />
+                        </View>
+                        )}
+                </View>
+                <Text className=''>{ userInfo ? userInfo.nome : "Acesse sua conta" }</Text>
             </View>
             <DrawerItemList {...props} />
             {

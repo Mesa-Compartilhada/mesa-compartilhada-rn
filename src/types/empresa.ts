@@ -8,7 +8,8 @@ export type Empresa = {
     nome: string,
     email: string,
     status: string,
-    endereco: Endereco
+    endereco: Endereco,
+    fotoPerfil?: string
 }
 
 export type EmpresaAdd = {
@@ -18,7 +19,8 @@ export type EmpresaAdd = {
     nome: string,
     email: string,
     senha: string,
-    enderecoId: string
+    enderecoId: string,
+    fotoPerfil?: string
 }
 
 export type EmpresaLogin = {

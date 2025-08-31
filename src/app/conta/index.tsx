@@ -8,8 +8,8 @@ import Collapsible from "react-native-collapsible"
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Conta() {
-    const [isDadosOpen, setIsDadosOpen] = useState(false)
-    const [isSenhaOpen, setIsSenhaOpen] = useState(false)
+    const [isDadosOpen, setIsDadosOpen] = useState(true)
+    const [isSenhaOpen, setIsSenhaOpen] = useState(true)
 
     return (
         <SafeAreaView>

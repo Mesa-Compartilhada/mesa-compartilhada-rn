@@ -1,10 +1,10 @@
 import { getDoacaoByFilter } from "@/src/api/services/doacaoService";
 import { Doacao, DoacaoFilter } from "@/src/types/doacao";
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, FlatList, Text, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
 import DoacaoCard from "./doacaoCard";
-import IconButton from "../buttons/iconButton";
+import ButtonDefault from "../buttons/buttonDefault";
 import { MaterialIcons } from "@expo/vector-icons";
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
 export function DoacoesList({ filters }: Props) {
     const [doacoes, setDoacoes] = useState<Doacao[] | null>(null)
     const [isLoading, setIsLoading] = useState(true)
+    const carouselData = doacoes ? [...doacoes, null] : [];
 
     const carouselRef = useRef<ICarouselInstance>(null)
 
@@ -23,8 +24,8 @@ export function DoacoesList({ filters }: Props) {
         let res: [] = []
         const fetch = async () => {
             res = await getDoacaoByFilter(filters)
-            setDoacoes(res.slice(0, 3))
-        }
+            setDoacoes(res.slice(0, 5))
+        } 
         fetch()
     }, [])
 
@@ -46,28 +47,34 @@ export function DoacoesList({ filters }: Props) {
 
     if(!isLoading && doacoes && doacoes.length >= 1) {
         return (
-            <View>
+            <View className="items-center">
                 <Carousel
                     ref={carouselRef}
                     width={width * 0.8}
-                    loop={false}
+                    loop={true}
                     style={{ width: width }}
-                    height={150}
-                    data={doacoes}
-                    renderItem={({item}) => (
-                        <View>
-                            <DoacaoCard doacao={item} />
-                        </View>
-                    )}
+                    height={300}
+                    data={carouselData}
+                    mode="parallax"
+                    modeConfig={{
+                        parallaxScrollingScale: 1,
+                        parallaxScrollingOffset: 50
+                    }}
+                    renderItem={({item}) => {
+                        if(!item) {
+                            return (
+                                <View className="items-center justify-center h-full">
+                                    <ButtonDefault title="Mais doações" icon={<MaterialIcons name="arrow-forward" color={"white"} size={24} />} />
+                                </View>
+                            )
+                        }
+                        return (
+                            <View className="items-center">
+                                <DoacaoCard doacao={item} />
+                            </View>
+                        )
+                    }}
                 />
-                <View className="flex-row justify-between">
-                    <IconButton icon={<MaterialIcons name="arrow-back" color="white" size={24} />} onPress={() => {
-                        carouselRef.current?.prev()
-                    }} />
-                    <IconButton icon={<MaterialIcons name="arrow-forward" color="white" size={24} />} onPress={() => {
-                        carouselRef.current?.next()
-                    }} />
-                </View>
             </View>
         )
     }

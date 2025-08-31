@@ -26,7 +26,7 @@ export default function DoacoesListCompleta() {
 
     if(!isLoading && doacoes && doacoes.length >= 1) {
         return (
-            <ScrollView className="p-4">
+            <ScrollView className="p-4" contentContainerStyle={{ paddingBottom: 32 }}>
                 {
                     doacoes?.map((doacao, index) => (
                         <View key={index} className="items-center">

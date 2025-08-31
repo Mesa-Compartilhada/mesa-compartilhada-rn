@@ -2,7 +2,8 @@ import { StatusDoacao, TipoAlimento, TipoArmazenamento } from "@/src/constants/e
 import { Doacao } from "@/src/types/doacao";
 import dateFormatter from "@/src/utils/dateFormatter";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Image, Text, View } from "react-native";
 
 type Props = {
     doacao: Doacao
@@ -12,6 +13,7 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
     const empresaDoadora = doacao.empresaDoadora
     const empresaRecebedora = doacao.empresaRecebedora
     const endereco = doacao.empresaDoadora.endereco
+    const router = useRouter()
 
     const getStatusStyle = (status: StatusDoacao) => {
         switch (status) {
@@ -32,8 +34,18 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
 
     return (
         <View className="gap-4">
-            <View className="bg-cover bg-green-600 rounded-2xl">
-                <MaterialIcons className="m-auto" name="photo" size={256} color={"white"} />
+            <View className="bg-coverrounded-2xl items-center">
+                {
+                    doacao.imagemCapa
+                    ? (
+                        <Image className="w-96 h-96" source={{ uri: doacao.imagemCapa }} />
+                    )
+                    : (
+                        <View className="w-96 h-96">
+                            <MaterialIcons className="m-auto" name="no-photography" size={256} color={"black"} />
+                        </View>
+                    )
+                }
             </View>
             <View className="flex flex-row justify-between">
                 <Text className="font-extrabold text-3xl text-gray-700">{ doacao.nome }</Text>
@@ -46,7 +58,7 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
                 </View>
                 <View className="flex flex-row items-center gap-2">
                     <MaterialIcons name="store" size={24} color={"gray"} /> 
-                    <Text>{ empresaDoadora.nome }</Text>
+                    <Text onPress={() => { router.navigate({ pathname: "/perfil/[userId]", params: { userId: empresaDoadora.id } }) }}>{ empresaDoadora.nome }</Text>
                 </View>
             </View>
 

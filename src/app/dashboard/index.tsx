@@ -57,7 +57,7 @@ export default function Dashboard() {
         return (
             <ScrollView>
                 <View className="flex p-12 gap-16">
-                    <View>
+                    <View className="items-center">
                         {
                             doacoes
                             &&

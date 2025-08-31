@@ -20,7 +20,8 @@ export type Doacao = {
     empresaDoadoraConcluida: boolean,
     empresaRecebedoraConcluida: boolean,
     quantidade: number,
-    unidadeMedida: string
+    unidadeMedida: string,
+    imagemCapa: string
 }
 
 export type DoacaoAdd = {
@@ -37,7 +38,8 @@ export type DoacaoAdd = {
     tipoArmazenamento: number,
     empresaDoadoraId: string,
     quantidade: number,
-    unidadeMedida: number
+    unidadeMedida: number,
+    imagemCapa: string
 }
 
 export type DoacaoUpdateState = {

@@ -5,8 +5,10 @@ import { getToken } from "@/src/storage/secureStore";
 
 export async function addEmpresa(empresa: EmpresaAdd) {
     try {
-        const response = await api.post(`${ENDPOINTS.EMPRESAS}/register`, empresa)
-        console.warn(response)
+        const response = await api.post(`${ENDPOINTS.EMPRESAS}/register`, JSON.stringify(empresa), { 
+            timeout: 30000
+        }
+    )
         return { status: response.status === 200, statusCode: response.status, empresa: response.data }
     } catch(error) {
         console.log(error)

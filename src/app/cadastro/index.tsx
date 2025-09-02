@@ -14,6 +14,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import Snackbar from "@/src/components/snackbar/Snackbar";
+import ImagePickerButton from "@/src/components/buttons/imagePickerButton";
 
 const API_CEP_URL = "https://cep.awesomeapi.com.br/json"
 
@@ -36,6 +37,8 @@ const schema = yup.object().shape({
         .min(8, "Muito curta. Mínimo: 8 caracteres")
         .oneOf([yup.ref("senha")], "As senhas devem coincidir")
         .required("É necessário confirmar sua senha"),
+    fotoPerfil: yup.string()
+        .required("Selecione uma imagem para a foto de perfil"),
     tipo: yup.number()
         .required("Selecione o tipo de empresa"),
     categoria: yup.number()
@@ -83,6 +86,7 @@ export default function Cadastro() {
         nome: string,
         email: string,
         senha: string,
+        fotoPerfil: string,
         tipo: string,
         categoria: string,
         cep: string,
@@ -96,7 +100,7 @@ export default function Cadastro() {
         longitude: number
     ) {
         const enderecoResponse = await addEndereco({ cep, numero, logradouro, bairro, cidade, estado, pais, latitude, longitude })
-        const empresaResponse = await addEmpresa({ cnpj, nome, email, senha, tipo: parseInt(tipo), categoria: parseInt(categoria), enderecoId: enderecoResponse.id })
+        const empresaResponse = await addEmpresa({ cnpj, nome, email, senha, fotoPerfil, tipo: parseInt(tipo), categoria: parseInt(categoria), enderecoId: enderecoResponse.id })
         if(empresaResponse?.status) {
             setMsg("Cadastrado com sucesso")
             router.navigate("/login")
@@ -114,6 +118,7 @@ export default function Cadastro() {
             email: "",
             senha: "",
             confirmacaoDeSenha: "",
+            fotoPerfil: "",
             tipo: "1",
             categoria: "1",
             cep: "",
@@ -136,6 +141,7 @@ export default function Cadastro() {
                 values.nome,
                 values.email,
                 values.senha,
+                values.fotoPerfil,
                 values.tipo,
                 values.categoria,
                 values.cep,
@@ -250,6 +256,12 @@ export default function Cadastro() {
                                 isPassword={true}
                                 />
                         </View>
+
+                        <ImagePickerButton callback={(base64) => {
+                            if(base64) {
+                                setFieldValue("fotoPerfil", base64)
+                            }
+                        }} />
 
                         <Text className="text-lg font-bolder text-gray-700">Tipo da empresa:</Text>
                         <PickerDefault values={tiposEmpresa} onChange={(key) => setFieldValue("tipo", key)} />

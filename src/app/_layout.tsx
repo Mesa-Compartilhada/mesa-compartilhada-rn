@@ -27,9 +27,10 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                 <View>
                     {userInfo?.fotoPerfil ? (
                         <Image
+                            key={userInfo.fotoPerfil}
                             className="w-20 h-20 rounded-full"
                             source={{
-                            uri: "https://res.cloudinary.com/dpokxqzzq/image/upload/v1756577882/af669sdjtka7kom0iifl.png",
+                            uri: userInfo.fotoPerfil,
                             }}
                         />
                         ) : (

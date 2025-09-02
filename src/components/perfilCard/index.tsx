@@ -16,7 +16,7 @@ export default function PerfilCard({ user }: Props) {
                         <Image
                             className="w-40 h-40 rounded-full"
                             source={{
-                            uri: "https://res.cloudinary.com/dpokxqzzq/image/upload/v1756577882/af669sdjtka7kom0iifl.png",
+                            uri: user.fotoPerfil,
                             }}
                         />
                         ) : (

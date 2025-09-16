@@ -6,6 +6,7 @@ import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
 import DoacaoCard from "./doacaoCard";
 import ButtonDefault from "../buttons/buttonDefault";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 type Props = {
     filters: DoacaoFilter
@@ -19,6 +20,8 @@ export function DoacoesList({ filters }: Props) {
     const carouselRef = useRef<ICarouselInstance>(null)
 
     const { width } = Dimensions.get('window')
+
+    const router = useRouter()
 
     useEffect(() => {
         let res: [] = []
@@ -51,7 +54,7 @@ export function DoacoesList({ filters }: Props) {
                 <Carousel
                     ref={carouselRef}
                     width={width * 0.8}
-                    loop={true}
+                    loop={false}
                     style={{ width: width }}
                     height={300}
                     data={carouselData}
@@ -64,7 +67,11 @@ export function DoacoesList({ filters }: Props) {
                         if(!item) {
                             return (
                                 <View className="items-center justify-center h-full">
-                                    <ButtonDefault title="Mais doações" icon={<MaterialIcons name="arrow-forward" color={"white"} size={24} />} />
+                                    <ButtonDefault title="Mais doações" icon={<MaterialIcons name="arrow-forward" color={"white"} size={24} />}
+                                    onPress={() => {
+                                        router.push("/lista-doacoes")
+                                    }}
+                                    />
                                 </View>
                             )
                         }

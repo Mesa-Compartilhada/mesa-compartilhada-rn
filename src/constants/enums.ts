@@ -19,3 +19,10 @@ export enum StatusDoacao {
     CONCLUIDA = "CONCLUIDA",
     CANCELADA = "CANCELADA"
 }
+
+export enum UnidadeMedida {
+    ML = 1,
+    G,
+    L,
+    KG
+}

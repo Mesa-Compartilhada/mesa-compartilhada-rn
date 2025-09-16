@@ -13,14 +13,14 @@ export type Doacao = {
     dataMaxRetirada: string,
     horarioMin: string,
     horarioMax: string,
-    tipoAlimento: string,
-    tipoArmazenamento: string,
+    tipoAlimento: number,
+    tipoArmazenamento: number,
     empresaDoadora: Empresa,
     empresaRecebedora: Empresa,
     empresaDoadoraConcluida: boolean,
     empresaRecebedoraConcluida: boolean,
     quantidade: number,
-    unidadeMedida: string,
+    unidadeMedida: number,
     imagemCapa: string
 }
 

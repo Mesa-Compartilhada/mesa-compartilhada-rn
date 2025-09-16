@@ -1,4 +1,4 @@
-import { StatusDoacao, TipoAlimento, TipoArmazenamento } from "@/src/constants/enums";
+import { StatusDoacao, TipoAlimento, TipoArmazenamento, UnidadeMedida } from "@/src/constants/enums";
 import { Doacao } from "@/src/types/doacao";
 import dateFormatter from "@/src/utils/dateFormatter";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -48,8 +48,8 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
                 }
             </View>
             <View className="flex flex-row justify-between">
-                <Text className="font-extrabold text-3xl text-gray-700">{ doacao.nome }</Text>
-                <Text className="font-extrabold text-3xl text-gray-700">{ doacao.quantidade } { /* doacao.unidadeMedida */ "kg"  }</Text>
+                <Text className="font-extrabold text-3xl text-gray-700 w-2/3">{ doacao.nome }</Text>
+                <Text className="font-extrabold text-3xl text-gray-700">{ doacao.quantidade } { UnidadeMedida[doacao.unidadeMedida] }</Text>
             </View>
             <View>
                 <View className="flex flex-row items-center gap-2">
@@ -80,14 +80,14 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
                 <View className="flex-1 items-center bg-green-100 rounded-2xl p-2 shadow">
                     <MaterialIcons name="food-bank" size={36} color="#166534" />
                     <Text className="text-green-900 font-semibold text-center mt-2">
-                    {TipoAlimento[parseInt(doacao.tipoAlimento)]}
+                    {TipoAlimento[doacao.tipoAlimento]}
                     </Text>
                 </View>
 
                 <View className="flex-1 items-center bg-blue-100 rounded-2xl p-2 shadow">
                     <MaterialIcons name="inventory" size={36} color="#1e3a8a" />
                     <Text className="text-blue-900 font-semibold text-center mt-2">
-                    {TipoArmazenamento[parseInt(doacao.tipoArmazenamento)]}
+                    {TipoArmazenamento[doacao.tipoArmazenamento]}
                     </Text>
                 </View>
             </View>

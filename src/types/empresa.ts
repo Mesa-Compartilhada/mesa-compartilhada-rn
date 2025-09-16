@@ -41,3 +41,8 @@ export type EmpresaResetPassword = {
     token: string,
     senha: string
 }
+
+export type EmpresaUpdatePassword = {
+    senhaAtual: string,
+    senhaNova: string
+}

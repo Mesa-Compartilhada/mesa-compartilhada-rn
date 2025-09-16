@@ -96,6 +96,9 @@ function ProtectedLayout() {
                     <Drawer.Screen name='configuracoes/index' options={{ title: "Configurações", 
                         drawerIcon: ({color, size}) => <MaterialIcons name='settings' size={size} color={color} /> }} 
                     />
+                    <Drawer.Screen name='historico/index' options={{ title: "Historico", 
+                        drawerIcon: ({color, size}) => <MaterialIcons name='history' size={size} color={color} /> }} 
+                    />
                 </Drawer.Protected>
                 <Drawer.Protected guard={isLoggedIn && userInfo?.tipo === "RECEBEDORA"}>
                     <Drawer.Screen name="lista-doacoes/index" options={{ title: "Doações",

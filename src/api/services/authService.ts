@@ -32,3 +32,35 @@ export async function updatePassword(senhas: EmpresaUpdatePassword) {
         return { status: false, statusCode: 500, message: "Erro inesperado" }
     }
 }
+
+export async function sendToken(email: string) {
+    const jwt = await getToken()
+    try {
+        const response = await api.post(`${ENDPOINTS.TOKEN}/${email}`)
+        let statusCode = response.status
+        let message = statusCode === 200 ? "Sucesso! Um token foi enviado ao seu email" : "Erro ao enviar token por email"
+        console.warn(response)
+        return { status: statusCode === 200, statusCode, data: response.data, message }
+    } catch(error) {
+        console.warn(error)
+        return { status: false, statusCode: 500, message: "Erro inesperado" }
+    }
+}
+
+export async function recoverPassword(senhas: EmpresaUpdatePassword) {
+    const jwt = await getToken()
+    try {
+        const response = await api.put(`${ENDPOINTS.EMPRESAS}/recuperar-senha`, JSON.stringify(senhas), {
+            headers: {
+                Authorization: `Bearer ${jwt}`,
+            }
+        })
+        let statusCode = response.status
+        let message = statusCode === 200 ? "Senha atualizada com sucesso" : "Credenciais inválidas"
+        console.warn(response)
+        return { status: statusCode === 200, statusCode, data: response.data, message }
+    } catch(error) {
+        console.warn(error)
+        return { status: false, statusCode: 500, message: "Erro inesperado" }
+    }
+}

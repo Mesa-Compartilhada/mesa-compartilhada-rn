@@ -7,7 +7,7 @@ import { Text, View } from "react-native"
 import * as yup from 'yup'
 import ButtonDefault from "../../buttons/buttonDefault"
 import { Snackbar } from "react-native-paper"
-import { updatePassword } from "@/src/api/services/authService"
+import { sendToken, updatePassword } from "@/src/api/services/authService"
 import { Empresa } from "@/src/types/empresa"
 
 const schemaEmail = yup.object().shape({
@@ -45,17 +45,22 @@ export default function RecuperarSenhaForm({ user }: Props) {
                 <Formik
                 innerRef={formikRef}
                 initialValues={{
-                    email: ""
+                    email: user?.email
                 }}
                 validationSchema={schemaEmail}
                 validateOnChange={false}
                 validateOnBlur={true}   
                 onSubmit={ (values, { resetForm }) => {
                     const update = async () => {
-                        console.warn(values.email)
+                        if(values.email) {
+                            let res = await sendToken(values.email)
+                            if(res.status) {
+                                console.warn(res)
+                                setPage(2)
+                            }
+                        }
                     }
                     update()
-                    setPage(2)
                 }}>
                     {({ 
                         values,
@@ -99,7 +104,7 @@ export default function RecuperarSenhaForm({ user }: Props) {
                 validateOnBlur={true}   
                 onSubmit={ (values, { resetForm }) => {
                     const update = async () => {
-                        console.warn(values.token)
+                        
                         setPage(3)
                     }
                     update()
@@ -148,7 +153,7 @@ export default function RecuperarSenhaForm({ user }: Props) {
                 validateOnBlur={true}   
                 onSubmit={ (values, { resetForm }) => {
                     const update = async () => {
-                        console.warn(values.senhaNova)
+                        
                     }
                     update()
                 }}>

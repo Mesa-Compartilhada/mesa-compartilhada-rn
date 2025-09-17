@@ -108,7 +108,7 @@ export default function Login() {
                                 autoCapitalize="none"
                                 isPassword={true}
                             />
-                            <Link className="text-right" href={"/cadastro"}>Esqueceu sua senha?</Link>
+                            <Link className="text-right" href={"/recuperar-senha"}>Esqueceu sua senha?</Link>
                         </View>
                         <View className="mb-8">
                             <ButtonDefault 

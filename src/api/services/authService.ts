@@ -25,6 +25,7 @@ export async function updatePassword(senhas: EmpresaUpdatePassword) {
         })
         let statusCode = response.status
         let message = statusCode === 200 ? "Senha atualizada com sucesso" : "Credenciais inválidas"
+        console.warn(response)
         return { status: statusCode === 200, statusCode, data: response.data, message }
     } catch(error) {
         console.warn(error)

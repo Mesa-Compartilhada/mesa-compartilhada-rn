@@ -79,6 +79,9 @@ function ProtectedLayout() {
                     <Drawer.Screen name="cadastro/index" options={{ title: "Cadastro",
                         drawerIcon: ({color, size}) => <MaterialIcons name='app-registration' size={size} color={color} />
                      }} />
+                    <Drawer.Screen name="recuperar-senha/index" options={{ title: "Recuperação de senha",
+                        drawerIcon: ({color, size}) => <MaterialIcons name='password' size={size} color={color} />
+                    }} />
                 </Drawer.Protected>
                 <Drawer.Protected guard={isLoggedIn}>
                     <Drawer.Screen name='dashboard/index' options={{ title: "Dashboard", 

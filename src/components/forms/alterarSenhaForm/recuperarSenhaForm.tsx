@@ -1,14 +1,15 @@
 import InputDefault from "@/components/inputs/inputDefault"
 import { Colors } from "@/src/constants/Colors"
 import { MaterialIcons } from "@expo/vector-icons"
-import { Formik, FormikProps } from "formik"
+import { Formik } from "formik"
 import { useRef, useState } from "react"
 import { Text, View } from "react-native"
 import * as yup from 'yup'
 import ButtonDefault from "../../buttons/buttonDefault"
 import { Snackbar } from "react-native-paper"
-import { sendToken, updatePassword } from "@/src/api/services/authService"
-import { Empresa } from "@/src/types/empresa"
+import { recoverPassword, sendToken } from "@/src/api/services/authService"
+import { Empresa, EmpresaResetPassword } from "@/src/types/empresa"
+import { useRouter } from "expo-router"
 
 const schemaEmail = yup.object().shape({
     email: yup.string()
@@ -37,6 +38,10 @@ export default function RecuperarSenhaForm({ user }: Props) {
     const [msg, setMsg] = useState("")
     const [page, setPage] = useState(1)
 
+    const [token, setToken] = useState("")
+
+    const router = useRouter()
+
     return (
         <View>
             {
@@ -55,7 +60,6 @@ export default function RecuperarSenhaForm({ user }: Props) {
                         if(values.email) {
                             let res = await sendToken(values.email)
                             if(res.status) {
-                                console.warn(res)
                                 setPage(2)
                             }
                         }
@@ -83,9 +87,14 @@ export default function RecuperarSenhaForm({ user }: Props) {
                                 error={errors.email}
                                 autoCapitalize="none"
                             />
-                            <ButtonDefault title="Enviar email" 
-                                onPress={handleSubmit as any}
-                            />
+                            <View className="flex-row">
+                                <ButtonDefault title="Já tenho um código"
+                                    onPress={() => setPage(2)}
+                                />
+                                <ButtonDefault title="Enviar email" 
+                                    onPress={handleSubmit as any}
+                                />
+                            </View>
                         </View>
                     )
                     }
@@ -104,7 +113,7 @@ export default function RecuperarSenhaForm({ user }: Props) {
                 validateOnBlur={true}   
                 onSubmit={ (values, { resetForm }) => {
                     const update = async () => {
-                        
+                        setToken(values.token)
                         setPage(3)
                     }
                     update()
@@ -148,12 +157,15 @@ export default function RecuperarSenhaForm({ user }: Props) {
                 initialValues={{
                     senhaNova: ""
                 }}
-                validationSchema={schemaToken}
+                validationSchema={schemaSenha}
                 validateOnChange={false}
                 validateOnBlur={true}   
                 onSubmit={ (values, { resetForm }) => {
                     const update = async () => {
-                        
+                        const res = await recoverPassword({ token, senha: values.senhaNova})
+                        if(res.status) {
+                            router.push({ pathname: "/dashboard" })
+                        }
                     }
                     update()
                 }}>
@@ -175,6 +187,7 @@ export default function RecuperarSenhaForm({ user }: Props) {
                                 Icon={<MaterialIcons name="password" size={24} color={Colors.azul} />}
                                 placeholder={"********"}
                                 error={errors.senhaNova}
+                                secureTextEntry={true}
                                 autoCapitalize="none"
                             />
                             <View className="flex-row">

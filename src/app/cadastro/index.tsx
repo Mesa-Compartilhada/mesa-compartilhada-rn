@@ -17,6 +17,8 @@ import Snackbar from "@/src/components/snackbar/Snackbar";
 import ImagePickerButton from "@/src/components/buttons/imagePickerButton";
 import { TiposEmpresa } from "@/src/constants/empresa/tipos";
 import { categoriasEstabelecimento, categoriasInstituicao } from "@/src/constants/empresa/categorias";
+import { Endereco, EnderecoAdd } from "@/src/types/endereco";
+import { EmpresaAdd } from "@/src/types/empresa";
 
 const API_CEP_URL = "https://cep.awesomeapi.com.br/json"
 
@@ -39,8 +41,7 @@ const schema = yup.object().shape({
         .min(8, "Muito curta. Mínimo: 8 caracteres")
         .oneOf([yup.ref("senha")], "As senhas devem coincidir")
         .required("É necessário confirmar sua senha"),
-    fotoPerfil: yup.string()
-        .required("Selecione uma imagem para a foto de perfil"),
+    fotoPerfil: yup.string(),
     tipo: yup.number()
         .required("Selecione o tipo de empresa"),
     categoria: yup.number()
@@ -62,33 +63,8 @@ export default function Cadastro() {
     const [msg, setMsg] = useState("")
     const router = useRouter()
  
-    async function cadastro(
-        cnpj: string,
-        nome: string,
-        email: string,
-        senha: string,
-        fotoPerfil: string,
-        tipo: number,
-        categoria: number,
-        cep: string,
-        numero: string,
-        logradouro: string,
-        bairro: string,
-        cidade: string,
-        estado: string,
-        pais: string,
-        latitude: number,
-        longitude: number
-    ) {
-        const enderecoResponse = await addEndereco({ cep, numero, logradouro, bairro, cidade, estado, pais, latitude, longitude })
-        const empresaResponse = await addEmpresa({ cnpj, nome, email, senha, fotoPerfil, tipo: tipo, categoria: categoria, enderecoId: enderecoResponse.id })
-        if(empresaResponse?.status) {
-            setMsg("Cadastrado com sucesso")
-            router.navigate("/login")
-        }
-        else {
-            setMsg("Erro ao realizar o cadastro")
-        }
+    async function cadastrar() {
+        // console.warn(logradouro)
     }
 
     return (
@@ -117,24 +93,40 @@ export default function Cadastro() {
         validateOnChange={false}
         validateOnBlur={true} 
         onSubmit={ values => {
-            cadastro(
-                values.cnpj,
-                values.nome,
-                values.email,
-                values.senha,
-                values.fotoPerfil,
-                values.tipo,
-                values.categoria,
-                values.cep,
-                values.numero,
-                values.logradouro,
-                values.bairro,
-                values.cidade,
-                values.estado,
-                values.pais,
-                values.latitude,
-                values.longitude
-            )
+            const cadastrar = async () => {
+                const enderecoAdd: EnderecoAdd = {
+                    cep: values.cep,
+                    bairro: values.bairro,
+                    logradouro: values.logradouro,
+                    cidade: values.cidade,
+                    estado: values.estado,
+                    pais: values.pais,
+                    numero: values.numero,
+                    latitude: values.latitude,
+                    longitude: values.longitude
+                }
+                const enderecoResponse = await addEndereco(enderecoAdd)
+                const empresaAdd: EmpresaAdd = {
+                    cnpj: values.cnpj,
+                    nome: values.nome,
+                    email: values.email,
+                    senha: values.senha,
+                    fotoPerfil: values.fotoPerfil ? values.fotoPerfil : undefined,
+                    tipo: values.tipo,
+                    categoria: values.categoria,
+                    enderecoId: enderecoResponse.id
+                }
+                const empresaResponse = await addEmpresa(empresaAdd)
+                console.warn(empresaResponse)
+                if(empresaResponse?.status) {
+                    setMsg("Cadastrado com sucesso")
+                    router.navigate("/login")
+                }
+                else {
+                    setMsg("Erro ao realizar o cadastro")
+                }
+            }
+            cadastrar()
         }}>
             {({ 
                 values,

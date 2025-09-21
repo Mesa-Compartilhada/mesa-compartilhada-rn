@@ -16,7 +16,7 @@ export default function Configuracoes() {
                     router.navigate("/conta")
                 }} />
                 <ButtonMenus icon={<MaterialIcons name="password" size={36} color={"gray"} />} title="Esqueci minha senha" onPress={() => {
-                    router.push({pathname: "/recuperar-senha", params: userInfo.email })
+                    router.push({pathname: "/recuperar-senha", params: userInfo.email as any })
                 }}/>
                 <ButtonMenus icon={<MaterialIcons name="accessibility-new" size={36} color={"gray"} />} title="Acessibilidade" />
                 <ButtonMenus icon={<MaterialIcons name="info" size={36} color={"gray"} />} title="Sobre e suporte" />

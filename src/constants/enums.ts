@@ -1,3 +1,30 @@
+export enum StatusEmpresa {
+    ATIVA = 1,
+    SUSPENSA,
+    INATIVA
+}
+
+export enum TipoEmpresa {
+    DOADORA = 1,
+    RECEBEDORA
+}
+
+export enum CategoriaEstabelecimento {
+    RESTAURANTE = 1,
+    HORTIFRUTTI,
+    MERCADO,
+    PADARIA,
+    FASTFOOD,
+    ADEGA
+}
+
+export enum CategoriaInstituicao {
+    ONG = 1,
+    OSC,
+    RELIGIOSA,
+    BANCODEALIMENTOS
+}
+
 export enum TipoAlimento {
     CASEIRO = 1,
     INDUSTRIALIZADO,

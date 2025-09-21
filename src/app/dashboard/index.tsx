@@ -2,6 +2,7 @@ import { getDoacaoByFilter } from "@/src/api/services/doacaoService";
 import ButtonDefault from "@/src/components/buttons/buttonDefault";
 import DoacaoCard from "@/src/components/doacoesList/doacaoCard";
 import { DoacoesList } from "@/src/components/doacoesList/doacoesList";
+import { TipoEmpresa } from "@/src/constants/enums";
 import { useAuth } from "@/src/context/AuthContext";
 import { Doacao } from "@/src/types/doacao";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -20,7 +21,7 @@ export default function Dashboard() {
         const fetchDoacoes = async () => {
             let response
             if(userInfo) {
-                if(userInfo?.tipo === "DOADORA") {
+                if(userInfo?.tipo === TipoEmpresa.DOADORA) {
                     response = await getDoacaoByFilter({ empresaDoadoraId: userInfo.id })
                 }
                 else {
@@ -32,7 +33,7 @@ export default function Dashboard() {
         fetchDoacoes()
     }, [])
 
-    if(isLoggedIn && userInfo && userInfo.tipo === "DOADORA") {
+    if(isLoggedIn && userInfo && userInfo.tipo === TipoEmpresa.DOADORA) {
         return (
             <ScrollView className="flex p-12 gap-16">
                 <View>
@@ -53,7 +54,7 @@ export default function Dashboard() {
             </ScrollView>
         )
     }
-    else if(isLoggedIn && userInfo && userInfo.tipo === "RECEBEDORA") {
+    else if(isLoggedIn && userInfo && userInfo.tipo === TipoEmpresa.RECEBEDORA) {
         return (
             <ScrollView>
                 <View className="flex p-12 gap-16">

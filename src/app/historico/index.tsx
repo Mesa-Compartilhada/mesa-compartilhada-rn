@@ -1,6 +1,6 @@
 import { getDoacaoByFilter } from "@/src/api/services/doacaoService";
 import HistoricoList from "@/src/components/historico/historicoList";
-import { StatusDoacao } from "@/src/constants/enums";
+import { StatusDoacao, TipoEmpresa } from "@/src/constants/enums";
 import { useAuth } from "@/src/context/AuthContext";
 import { Doacao } from "@/src/types/doacao";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -17,7 +17,7 @@ export default function Historico() {
         if(!isLoading && userInfo) {
             const fetch = async() => {
                 let res
-                if(userInfo.tipo === "DOADORA") {
+                if(userInfo.tipo === TipoEmpresa.DOADORA) {
                     res = await getDoacaoByFilter({
                         status: [StatusDoacao.CONCLUIDA, StatusDoacao.CANCELADA],
                         empresaDoadoraId: userInfo.id

@@ -15,9 +15,20 @@ export async function addEmpresa(empresa: EmpresaAdd) {
     }
 }
 
-export async function updateEmpresa(id: string, empresa: EmpresaUpdate): Promise<EmpresaUpdate> {
-    const response = await api.put(`${ENDPOINTS.EMPRESAS}/${id}`, empresa)
-    return response.data
+export async function updateEmpresa(empresa: EmpresaUpdate) {
+    const jwt = await getToken()
+    if(jwt) {
+        try {
+            const response = await api.put(`${ENDPOINTS.EMPRESAS}`, empresa, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`
+                }
+            })
+            return response.data   
+        } catch(error) {
+            console.warn(error)
+        }
+    }
 }
 
 export async function getEmpresa(id: string): Promise<Empresa> {

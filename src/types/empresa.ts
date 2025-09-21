@@ -3,11 +3,11 @@ import { Endereco } from "./endereco"
 export type Empresa = {
     id: string,
     cnpj: string,
-    tipo: string,
-    categoria: string,
+    tipo: number,
+    categoria: number,
     nome: string,
     email: string,
-    status: string,
+    status: number,
     endereco: Endereco,
     fotoPerfil?: string
 }
@@ -34,7 +34,8 @@ export type EmpresaUpdate = {
     categoria: number,
     nome: string,
     email: string,
-    enderecoId: string
+    enderecoId: string,
+    fotoPerfil?: string
 }
 
 export type EmpresaResetPassword = {

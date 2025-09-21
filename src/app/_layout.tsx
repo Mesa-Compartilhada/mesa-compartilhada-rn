@@ -7,6 +7,7 @@ import { Text, View, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { PaperProvider } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { TipoEmpresa } from '../constants/enums';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
     const { isLoggedIn, logoutUser, userInfo } = useAuth()
@@ -100,7 +101,7 @@ function ProtectedLayout() {
                         drawerIcon: ({color, size}) => <MaterialIcons name='history' size={size} color={color} /> }} 
                     />
                 </Drawer.Protected>
-                <Drawer.Protected guard={isLoggedIn && userInfo?.tipo === "RECEBEDORA"}>
+                <Drawer.Protected guard={isLoggedIn && userInfo?.tipo === TipoEmpresa.RECEBEDORA}>
                     <Drawer.Screen name="lista-doacoes/index" options={{ title: "Doações",
                     drawerIcon: ({color, size}) => <MaterialIcons name='food-bank' size={size} color={color} />
                     }} />

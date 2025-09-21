@@ -1,3 +1,4 @@
+import { CategoriaEstabelecimento, CategoriaInstituicao, TipoEmpresa } from "@/src/constants/enums"
 import { Empresa } from "@/src/types/empresa"
 import { MaterialIcons } from "@expo/vector-icons"
 import { Image, Text, View } from "react-native"
@@ -28,7 +29,10 @@ export default function PerfilCard({ user }: Props) {
                 
                 
                 <Text className="text-3xl break-words">{ user.nome }</Text>
-                <Text className="text-xl">{ user.categoria.split("")[0]+user.categoria.substring(1).toLowerCase() } - { user.tipo.split("")[0]+user.tipo.substring(1).toLowerCase() }</Text>
+                <Text className="text-xl">{ (TipoEmpresa.DOADORA ?
+                                            CategoriaEstabelecimento[user.categoria].split("")[0]+CategoriaEstabelecimento[user.categoria].substring(1).toLowerCase() :
+                                            CategoriaInstituicao[user.categoria].split("")[0]+CategoriaInstituicao[user.categoria].substring(1).toLowerCase()) + " - " +
+                                            TipoEmpresa[user.tipo].split("")[0] + TipoEmpresa[user.tipo].substring(1).toLowerCase() }</Text>
                 
                 <View className="flex content-center gap-2">
                     <View className="flex flex-row gap-2">

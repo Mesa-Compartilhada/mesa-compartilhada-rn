@@ -15,6 +15,8 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import Snackbar from "@/src/components/snackbar/Snackbar";
 import ImagePickerButton from "@/src/components/buttons/imagePickerButton";
+import { TiposEmpresa } from "@/src/constants/empresa/tipos";
+import { categoriasEstabelecimento, categoriasInstituicao } from "@/src/constants/empresa/categorias";
 
 const API_CEP_URL = "https://cep.awesomeapi.com.br/json"
 
@@ -59,27 +61,6 @@ const schema = yup.object().shape({
 export default function Cadastro() {
     const [msg, setMsg] = useState("")
     const router = useRouter()
-
-    const tiposEmpresa = [
-        { key: "1", value: "Doadora" },
-        { key: "2", value: "Recebedora" }
-    ]
-    
-    const categoriasInstituicao = [
-        { key: "1", value: "ONG" },
-        { key: "2", value: "OSC" },
-        { key: "3", value: "Religiosa" },
-        { key: "4", value: "Banco de alimentos" },
-    ]
-    
-    const categoriasEstabelecimento = [
-        { key: "1", value: "Restaurante" },
-        { key: "2", value: "Hortifrutti" },
-        { key: "3", value: "Mercado" },
-        { key: "4", value: "Padaria" },
-        { key: "5", value: "Fastfood" },
-        { key: "6", value: "Adega" }
-    ]
  
     async function cadastro(
         cnpj: string,
@@ -87,8 +68,8 @@ export default function Cadastro() {
         email: string,
         senha: string,
         fotoPerfil: string,
-        tipo: string,
-        categoria: string,
+        tipo: number,
+        categoria: number,
         cep: string,
         numero: string,
         logradouro: string,
@@ -100,7 +81,7 @@ export default function Cadastro() {
         longitude: number
     ) {
         const enderecoResponse = await addEndereco({ cep, numero, logradouro, bairro, cidade, estado, pais, latitude, longitude })
-        const empresaResponse = await addEmpresa({ cnpj, nome, email, senha, fotoPerfil, tipo: parseInt(tipo), categoria: parseInt(categoria), enderecoId: enderecoResponse.id })
+        const empresaResponse = await addEmpresa({ cnpj, nome, email, senha, fotoPerfil, tipo: tipo, categoria: categoria, enderecoId: enderecoResponse.id })
         if(empresaResponse?.status) {
             setMsg("Cadastrado com sucesso")
             router.navigate("/login")
@@ -119,8 +100,8 @@ export default function Cadastro() {
             senha: "",
             confirmacaoDeSenha: "",
             fotoPerfil: "",
-            tipo: "1",
-            categoria: "1",
+            tipo: 1,
+            categoria: 1,
             cep: "",
             numero: "",
             logradouro: "",
@@ -264,9 +245,9 @@ export default function Cadastro() {
                         }} />
 
                         <Text className="text-lg font-bolder text-gray-700">Tipo da empresa:</Text>
-                        <PickerDefault values={tiposEmpresa} onChange={(key) => setFieldValue("tipo", key)} />
+                        <PickerDefault values={TiposEmpresa} onChange={(key) => setFieldValue("tipo", key)} />
                         <Text className="text-lg font-bolder text-gray-700">Categoria da empresa:</Text>
-                        <PickerDefault values={values.tipo === "1" ? categoriasEstabelecimento : categoriasInstituicao} onChange={(key) => setFieldValue("categoria", key)} />
+                        <PickerDefault values={values.tipo === 1 ? categoriasEstabelecimento : categoriasInstituicao} onChange={(key) => setFieldValue("categoria", key)} />
 
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">CEP:</Text>

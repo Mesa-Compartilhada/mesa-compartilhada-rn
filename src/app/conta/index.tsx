@@ -1,6 +1,8 @@
 import ButtonMenus from "@/src/components/buttons/buttonMenus";
+import AlterarDadosForms from "@/src/components/forms/alterarDados/alterarDadosForm";
 import AlterarSenhaForm from "@/src/components/forms/alterarSenhaForm/alterarSenhaForm";
 import { Colors } from "@/src/constants/Colors";
+import { useAuth } from "@/src/context/AuthContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
@@ -8,6 +10,8 @@ import Collapsible from "react-native-collapsible"
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Conta() {
+    const { userInfo } = useAuth()
+
     const [isDadosOpen, setIsDadosOpen] = useState(true)
     const [isSenhaOpen, setIsSenhaOpen] = useState(true)
 
@@ -25,7 +29,9 @@ export default function Conta() {
                     }} />
                     
                     <Collapsible collapsed={isDadosOpen}>
-                        <AlterarSenhaForm />
+                        {
+                            userInfo && <AlterarDadosForms empresa={userInfo} />
+                        }
                     </Collapsible>
 
                     <ButtonMenus icon={

@@ -24,7 +24,7 @@ export async function updateEmpresa(empresa: EmpresaUpdate) {
                     Authorization: `Bearer ${jwt}`
                 }
             })
-            return response.data   
+            return { status: response.status === 200, statusCode: response.status, empresa: response.data, message: "Dados atualizados com sucesso" }
         } catch(error) {
             console.warn(error)
         }

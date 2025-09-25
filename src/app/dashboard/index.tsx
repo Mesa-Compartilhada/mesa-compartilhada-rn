@@ -13,15 +13,15 @@ import { ScrollView } from "react-native-gesture-handler";
 
 export default function Dashboard() {
 
-    const { isLoggedIn, userInfo } = useAuth()
+    const { isLoggedIn, userInfo, isLoading } = useAuth()
     const [doacoes, setDoacoes] = useState<Doacao[]>()
     const router = useRouter()
 
     useEffect(() => {
         const fetchDoacoes = async () => {
-            let response
-            if(userInfo) {
-                if(userInfo?.tipo === TipoEmpresa.DOADORA) {
+            let response: Doacao[] = []
+            if(isLoggedIn && userInfo && !isLoading) {
+                if(userInfo?.tipo === TipoEmpresa.DOADORA ) {
                     response = await getDoacaoByFilter({ empresaDoadoraId: userInfo.id })
                 }
                 else {
@@ -31,14 +31,14 @@ export default function Dashboard() {
             setDoacoes(response)
         }
         fetchDoacoes()
-    }, [])
+    }, [userInfo])
 
     if(isLoggedIn && userInfo && userInfo.tipo === TipoEmpresa.DOADORA) {
         return (
             <ScrollView className="flex p-12 gap-16">
                 <View>
                     {
-                        doacoes
+                        doacoes && doacoes.length > 0
                         &&
                         <>
                             <Text className="text-2xl">Sua doação mais recente:</Text>
@@ -60,7 +60,7 @@ export default function Dashboard() {
                 <View className="flex p-12 gap-16">
                     <View className="items-center">
                         {
-                            doacoes
+                            doacoes && doacoes.length > 0
                             &&
                             <>
                                 <Text className="text-2xl">Acompanhe sua última solicitação:</Text>

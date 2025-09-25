@@ -39,7 +39,7 @@ export default function DoacaoCard({ doacao }: Props) {
               ellipsizeMode="tail"
               onPress={() => {
                 router.push({
-                  pathname: "/perfil/[userId]",
+                    pathname: "/(drawer)/perfil/[userId]",
                   params: { userId: doacao.empresaDoadora.id }
                 })
               }}
@@ -50,7 +50,7 @@ export default function DoacaoCard({ doacao }: Props) {
             className="btnText text-center"
             onPress={() => {
               router.push({
-                pathname: "/perfil/[userId]",
+                pathname: "/(drawer)/perfil/[userId]",
                 params: { userId: doacao.empresaRecebedora.id }
               })
             }}

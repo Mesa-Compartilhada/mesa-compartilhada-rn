@@ -51,7 +51,7 @@ export async function getMe() {
                     Authorization: `Bearer ${jwt}`,
                 }
             })
-            return response
+            return { status: response.status === 200, statusCode: response.status, data: response.data }
         } catch(error) {
             console.log(error)
         }

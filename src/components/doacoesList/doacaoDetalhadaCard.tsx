@@ -58,7 +58,7 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
                 </View>
                 <View className="flex flex-row items-center gap-2">
                     <MaterialIcons name="store" size={24} color={"gray"} /> 
-                    <Text onPress={() => { router.navigate({ pathname: "/perfil/[userId]", params: { userId: empresaDoadora.id } }) }}>{ empresaDoadora.nome }</Text>
+                    <Text onPress={() => { router.navigate({ pathname: "/(drawer)/perfil/[userId]", params: { userId: empresaDoadora.id } }) }}>{ empresaDoadora.nome }</Text>
                 </View>
             </View>
 

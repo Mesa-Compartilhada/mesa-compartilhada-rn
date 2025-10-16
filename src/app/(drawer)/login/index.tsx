@@ -3,6 +3,7 @@ import { Colors } from "@/src/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { View, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import ButtonDefault from "@/src/components/buttons/buttonDefault";
+import { Instagram } from 'react-content-loader';
 
 import { Formik, FormikProps } from "formik"
 import * as yup from "yup"

@@ -1,9 +1,13 @@
-import { StatusDoacao, TipoAlimento, TipoArmazenamento, UnidadeMedida } from "@/src/constants/enums";
+import { StatusDoacao, TipoAlimento, TipoArmazenamento, TipoEmpresa, UnidadeMedida } from "@/src/constants/enums";
+import { useAuth } from "@/src/context/AuthContext";
 import { Doacao } from "@/src/types/doacao";
 import dateFormatter from "@/src/utils/dateFormatter";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Image, Text, View } from "react-native";
+import { Button } from "react-native-paper";
+import ButtonDefault from "../buttons/buttonDefault";
+import { updateStateDoacao } from "@/src/api/services/doacaoService";
 
 type Props = {
     doacao: Doacao
@@ -14,6 +18,8 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
     const empresaRecebedora = doacao.empresaRecebedora
     const endereco = doacao.empresaDoadora.endereco
     const router = useRouter()
+    const { userInfo } = useAuth()
+
 
     const getStatusStyle = (status: StatusDoacao) => {
         switch (status) {
@@ -70,6 +76,25 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
                     Fabricação: { dateFormatter(doacao.dataFabricacao) }
                 </Text>
             </View>
+            {
+                userInfo?.tipo === TipoEmpresa.RECEBEDORA
+                && doacao.status === StatusDoacao.DISPONIVEL
+                && 
+                <ButtonDefault 
+                    title="Solicitar"
+                    icon={<MaterialIcons name="add" size={36} color={"white"} />}
+                    onPress={async () => {
+                        const result = await updateStateDoacao(doacao.id, 
+                            {
+                                status: StatusDoacao.ANDAMENTO,
+                                empresaRecebedoraId: userInfo.id,
+                                empresaSolicitanteId: userInfo.id
+                            }
+                        )
+                        console.warn(result)
+                    }}
+                />
+            }
             <View className={`items-center rounded-2xl p-2 shadow ${statusStyle.bg}`}>
                 <MaterialIcons name={statusStyle.iconName as any} size={36} color={statusStyle.icon} />
                 <Text className={`font-semibold text-center mt-2 ${statusStyle.text}`}>

@@ -8,9 +8,17 @@ export async function addDoacao(doacao: DoacaoAdd): Promise<Doacao> {
     return response.data
 }
 
-export async function updateStateDoacao(id: string, doacao: DoacaoUpdateState): Promise<Doacao> {
-    const response = await api.put(`${ENDPOINTS.DOACOES}/status/${id}`, doacao)
-    return response.data
+export async function updateStateDoacao(id: string, doacao: DoacaoUpdateState) {
+    const jwt = await getToken()
+    if(jwt) {
+        const response = await api.put(`${ENDPOINTS.DOACOES}/status/${id}`, doacao, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
+        })
+        return response.data
+    }
 }
 
 export async function getDoacaoById(id: string): Promise<Doacao> {

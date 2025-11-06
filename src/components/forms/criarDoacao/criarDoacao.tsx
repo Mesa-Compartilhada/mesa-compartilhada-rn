@@ -24,40 +24,19 @@ import { TipodeArmazenamento, TipodoAlimento } from "@/src/constants/doacoes/tip
 const API_CEP_URL = "https://cep.awesomeapi.com.br/json"
 
 const schema = yup.object().shape({
-    cnpj: yup.string()
-        .matches(
-            /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/,
-            'CNPJ inválido'
-        )
-        .required("É necessário digitar o CNPJ"),
-    nome: yup.string()
-        .required("É necessário digitar o nome de sua empresa/instituição"),
-    email: yup.string()
-        .email("Digite um email válido")
-        .required("É necessário digitar um email"),
-    senha: yup.string()
-        .min(8, "Muito curta. Mínimo: 8 caracteres")
-        .required("É necessário digitar uma senha"),
-    confirmacaoDeSenha: yup.string()
-        .min(8, "Muito curta. Mínimo: 8 caracteres")
-        .oneOf([yup.ref("senha")], "As senhas devem coincidir")
-        .required("É necessário confirmar sua senha"),
-    fotoPerfil: yup.string(),
-    tipo: yup.number()
-        .required("Selecione o tipo de empresa"),
-    categoria: yup.number()
-        .required("Selecione a categoria de empresa"),
-    cep: yup.string()
-        .required(""),
-    numero: yup.string(),
-    logradouro: yup.string(),
-    bairro: yup.string(),
-    cidade: yup.string(),
-    estado: yup.string(),
-    pais: yup.string(),
-    complemento: yup.string(),
-    latitude: yup.string(),
-    longitude: yup.string()
+  nome: yup.string().required("É necessário digitar o nome da sua doação"),
+  descricao: yup.string().required("É necessário digitar a descrição"),
+  observacao: yup.string().required("É necessário digitar a observação"),
+  dataFabricacao: yup.string().min(8, "Muito curta. Mínimo: 8 caracteres").required("É necessário digitar a data de fabricação"),
+  dataValidade: yup.string().min(8, "Muito curta. Mínimo: 8 caracteres").required("É necessário digitar a data de validade"),
+  dataMaxRetirada: yup.string().min(8, "Muito curta. Mínimo: 8 caracteres").required("É necessário digitar a data máxima para retirada"),
+  horarioMin: yup.string().required("É necessário digitar o horário mínimo para retirada"),
+  horarioMax: yup.string().required("É necessário digitar o horário máximo para retirada"),
+  tipo: yup.number().required("Selecione o tipo de alimento"),
+  categoria: yup.number().required("Selecione o tipo de armazenamento"),
+  quantidade: yup.string().required("Informe a quantidade"),
+  unidadeMedida: yup.string().required("Informe a unidade de medida"),
+  imagemCapa: yup.string(),
 })
 
 export default function CriarDoacao() {
@@ -71,61 +50,26 @@ export default function CriarDoacao() {
     return (
         <Formik
         initialValues={{
-            cnpj: "",
             nome: "",
-            email: "",
-            senha: "",
-            confirmacaoDeSenha: "",
-            fotoPerfil: "",
-            tipo: 1,
-            categoria: 1,
-            cep: "",
-            numero: "",
-            logradouro: "",
-            bairro: "",
-            cidade: "",
-            estado: "",
-            pais: "",
-            complemento: "",
-            latitude: 0,
-            longitude: 0
+            descricao: "",
+            observacao: "",
+            dataFabricacao: "",
+            dataValidade: "",
+            dataMaxRetirada: "",
+            horarioMin: "",
+            horarioMax: "",
+            tipo: 0,
+            categoria: 0,
+            quantidade: "",
+            unidadeMedida: "",
+            imagemCapa: "",
         }}
         validationSchema={schema}
         validateOnChange={false}
         validateOnBlur={true} 
         onSubmit={ values => {
             const cadastrar = async () => {
-                const enderecoAdd: EnderecoAdd = {
-                    cep: values.cep,
-                    bairro: values.bairro,
-                    logradouro: values.logradouro,
-                    cidade: values.cidade,
-                    estado: values.estado,
-                    pais: values.pais,
-                    numero: values.numero,
-                    latitude: values.latitude,
-                    longitude: values.longitude
-                }
-                const enderecoResponse = await addEndereco(enderecoAdd)
-                const empresaAdd: EmpresaAdd = {
-                    cnpj: values.cnpj,
-                    nome: values.nome,
-                    email: values.email,
-                    senha: values.senha,
-                    fotoPerfil: values.fotoPerfil ? values.fotoPerfil : undefined,
-                    tipo: values.tipo,
-                    categoria: values.categoria,
-                    enderecoId: enderecoResponse.id
-                }
-                const empresaResponse = await addEmpresa(empresaAdd)
-                console.warn(empresaResponse)
-                if(empresaResponse?.status) {
-                    setMsg("Cadastrado com sucesso")
-                    router.navigate("/login")
-                }
-                else {
-                    setMsg("Erro ao realizar o cadastro")
-                }
+               
             }
             cadastrar()
         }}>
@@ -147,7 +91,7 @@ export default function CriarDoacao() {
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Nome Doação:</Text>
                             <InputDefault 
-                                value={values.cnpj}
+                                value={values.nome}
                                 onChangeText={handleChange("nome-doacao")}
                                 onBlur={handleBlur("nome-doacao")}
                                 Icon={ 
@@ -156,7 +100,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="Bolo de Morango"
-                                error={ touched.cnpj ? errors.cnpj : undefined}
+                                error={ touched.nome ? errors.nome : undefined}
                                 autoCapitalize="none" 
                                 />
                         </View>
@@ -164,7 +108,7 @@ export default function CriarDoacao() {
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Descrição de Doação:</Text>
                             <InputDefault 
-                                value={values.nome}
+                                value={values.descricao}
                                 onChangeText={handleChange("descricaoDoacao")}
                                 onBlur={handleBlur("descricaoDoacao")}
                                 Icon={ 
@@ -173,7 +117,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="Com calda de morango"
-                                error={ touched.nome ? errors.nome : undefined }
+                                error={ touched.descricao ? errors.descricao : undefined }
                                 autoCapitalize="none" 
                                 />
                         </View>
@@ -181,7 +125,7 @@ export default function CriarDoacao() {
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Observação Doação:</Text>
                             <InputDefault 
-                                value={values.email}
+                                value={values.observacao}
                                 onChangeText={handleChange("observacaoDoacao")}
                                 onBlur={handleBlur("observacaoDoacao")}
                                 Icon={ 
@@ -191,14 +135,14 @@ export default function CriarDoacao() {
                                 size={24} />} 
                                 placeholder="Sem glúten"
                                 autoCapitalize="none" 
-                                error={ touched.email ? errors.email : undefined }
+                                error={ touched.observacao ? errors.observacao : undefined }
                                 />
                         </View>
                         
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Data de Fabricação:</Text>
                             <InputDefault 
-                                value={values.senha}
+                                value={values.dataFabricacao}
                                 onChangeText={handleChange("dataFabricacao")}
                                 onBlur={handleBlur("dataFabricacao")}
                                 Icon={
@@ -207,7 +151,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="00/00/0000" 
-                                error={errors.senha}
+                                error={errors.dataFabricacao}
                                 autoCapitalize="none"
                                 dataDetectorTypes={"calendarEvent"}
                                 />
@@ -216,7 +160,7 @@ export default function CriarDoacao() {
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Data de Validade:</Text>
                             <InputDefault 
-                                value={values.confirmacaoDeSenha}
+                                value={values.dataValidade}
                                 onChangeText={handleChange("dataValidade")}
                                 onBlur={handleBlur("dataValidade")}
                                 Icon={
@@ -225,7 +169,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="00/00/0000" 
-                                error={errors.confirmacaoDeSenha}
+                                error={errors.dataValidade}
                                 autoCapitalize="none"
                                 />
                         </View>
@@ -234,7 +178,7 @@ export default function CriarDoacao() {
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Data máxima para retirada:</Text>
                             <InputDefault 
-                                value={values.confirmacaoDeSenha}
+                                value={values.dataMaxRetirada}
                                 onChangeText={handleChange("dataValidade")}
                                 onBlur={handleBlur("dataValidade")}
                                 Icon={
@@ -243,7 +187,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="00/00/0000" 
-                                error={errors.confirmacaoDeSenha}
+                                error={errors.dataMaxRetirada}
                                 autoCapitalize="none"
                                 />
                         </View>
@@ -251,7 +195,7 @@ export default function CriarDoacao() {
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Horário mínimo para retirada:</Text>
                             <InputDefault 
-                                value={values.confirmacaoDeSenha}
+                                value={values.horarioMin}
                                 onChangeText={handleChange("horarioMinRetirada")}
                                 onBlur={handleBlur("horarioMinRetirada")}
                                 Icon={
@@ -260,7 +204,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="00h00m BRT" 
-                                error={errors.confirmacaoDeSenha}
+                                error={errors.horarioMin}
                                 autoCapitalize="none"
                                 />
                         </View>
@@ -268,7 +212,7 @@ export default function CriarDoacao() {
                          <View>
                             <Text className="text-lg font-bolder text-gray-700">Horário máximo para retirada:</Text>
                             <InputDefault 
-                                value={values.confirmacaoDeSenha}
+                                value={values.horarioMax}
                                 onChangeText={handleChange("horarioMaxRetirada")}
                                 onBlur={handleBlur("horarioMaxRetirada")}
                                 Icon={
@@ -277,7 +221,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="00h00m BRT" 
-                                error={errors.confirmacaoDeSenha}
+                                error={errors.horarioMax}
                                 autoCapitalize="none"
                                 />
                         </View>
@@ -297,7 +241,7 @@ export default function CriarDoacao() {
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Quantidade Doação:</Text>
                             <InputDefault 
-                                value={values.cep}
+                                value={values.quantidade}
                                 
                                 onChangeText={handleChange("quantidade")}
                                 onBlur={handleBlur("quantidade")}
@@ -307,7 +251,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="00000000" 
-                                error={errors.cep}
+                                error={errors.quantidade}
                                 autoCapitalize="none"
                                 keyboardType="number-pad"
                             />
@@ -316,7 +260,7 @@ export default function CriarDoacao() {
                         <View>
                             <Text className="text-lg font-bolder text-gray-700">Unidade de Medida (kg,gr,l)</Text>
                             <InputDefault 
-                                value={values.numero}
+                                value={values.unidadeMedida}
                                 onChangeText={handleChange("unidadeMedida")}
                                 onBlur={handleBlur("unidadeMedida")}
                                 Icon={
@@ -325,7 +269,7 @@ export default function CriarDoacao() {
                                     color={Colors.azul} 
                                 size={24} />} 
                                 placeholder="000" 
-                                error={errors.numero}
+                                error={errors.unidadeMedida}
                                 autoCapitalize="none"
                                 />
                         </View>

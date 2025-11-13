@@ -44,11 +44,12 @@ export type DoacaoAdd = {
 
 export type DoacaoUpdateState = {
     status: string,
-    empresaRecebedoraId: string,
-    empresaSolicitanteId: string
+    empresaRecebedoraId?: string,
+    empresaSolicitanteId?: string
 }
 
 export type DoacaoFilter = {
+    id?: string,
     status?: string[],
     dataFabricacaoMin?: string,
     dataFabricacaoMax?: string,

@@ -10,7 +10,7 @@ export default function DoacaoDetalhada() {
     return (
         <SafeAreaView className="flex-1">
             <ScrollView className="p-4" contentContainerStyle={{ paddingBottom: 32 }}>
-                <DoacaoDetalhadaCard doacao={parsedDoacao} />
+                <DoacaoDetalhadaCard d={parsedDoacao} />
             </ScrollView>
         </SafeAreaView>
     )

@@ -7,18 +7,28 @@ import { useRouter } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import ButtonDefault from "../buttons/buttonDefault";
-import { updateStateDoacao } from "@/src/api/services/doacaoService";
+import { getDoacaoByFilter, updateStateDoacao } from "@/src/api/services/doacaoService";
+import { useEffect, useState } from "react";
 
 type Props = {
-    doacao: Doacao
+    d: Doacao
 }
 
-export default function DoacaoDetalhadaCard({ doacao }: Props) {
+export default function DoacaoDetalhadaCard({ d }: Props) {
+    const [doacao, setDoacao] = useState(d)
     const empresaDoadora = doacao.empresaDoadora
-    const empresaRecebedora = doacao.empresaRecebedora
-    const endereco = doacao.empresaDoadora.endereco
     const router = useRouter()
     const { userInfo } = useAuth()
+
+    useEffect(() => {
+        setDoacao(d)
+        updateDoacao()
+    }, [d])
+
+    const updateDoacao = async () => {
+        const result = await getDoacaoByFilter({id: d.id})
+        setDoacao(result[0])
+    }
 
 
     const getStatusStyle = (status: StatusDoacao) => {
@@ -60,7 +70,7 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
             <View>
                 <View className="flex flex-row items-center gap-2">
                     <MaterialIcons name="location-pin" size={24} color={"gray"} /> 
-                    <Text>{ endereco.logradouro }, { endereco.bairro }</Text>
+                    <Text>{ doacao.empresaDoadora.endereco.logradouro }, { doacao.empresaDoadora.endereco.bairro }</Text>
                 </View>
                 <View className="flex flex-row items-center gap-2">
                     <MaterialIcons name="store" size={24} color={"gray"} /> 
@@ -91,7 +101,66 @@ export default function DoacaoDetalhadaCard({ doacao }: Props) {
                                 empresaSolicitanteId: userInfo.id
                             }
                         )
-                        console.warn(result)
+                        await updateDoacao()
+                    }}
+                />
+            }
+            {
+                userInfo?.tipo === TipoEmpresa.RECEBEDORA
+                && doacao.status === StatusDoacao.ANDAMENTO
+                && doacao.empresaRecebedora && doacao.empresaRecebedora.id === userInfo.id
+                && 
+                <ButtonDefault 
+                    title="Confirmar recebimento"
+                    icon={<MaterialIcons name="add" size={36} color={"white"} />}
+                    onPress={async () => {
+                        const result = await updateStateDoacao(doacao.id, 
+                            {
+                                status: StatusDoacao.CONCLUIDA,
+                                empresaRecebedoraId: userInfo.id,
+                                empresaSolicitanteId: userInfo.id
+                            }
+                        )
+                        await updateDoacao()
+                    }}
+                />
+            }
+            {
+                userInfo?.tipo === TipoEmpresa.RECEBEDORA
+                && doacao.status === StatusDoacao.ANDAMENTO
+                && doacao.empresaRecebedora && doacao.empresaRecebedora.id === userInfo.id
+                && 
+                <ButtonDefault 
+                    title="Cancelar solicitação"
+                    icon={<MaterialIcons name="add" size={36} color={"white"} />}
+                    onPress={async () => {
+                        const result = await updateStateDoacao(doacao.id, 
+                            {
+                                status: StatusDoacao.DISPONIVEL,
+                                empresaRecebedoraId: userInfo.id,
+                                empresaSolicitanteId: userInfo.id
+                            }
+                        )
+                        await updateDoacao()
+                    }}
+                />
+            }
+            {
+                userInfo?.tipo === TipoEmpresa.DOADORA
+                && doacao.status === StatusDoacao.ANDAMENTO
+                && 
+                <ButtonDefault 
+                    title="Confirmar"
+                    icon={<MaterialIcons name="add" size={36} color={"white"} />}
+                    onPress={async () => {
+                        const result = await updateStateDoacao(doacao.id, 
+                            {
+                                status: StatusDoacao.CONCLUIDA,
+                                empresaRecebedoraId: doacao.empresaRecebedora.id,
+                                empresaSolicitanteId: userInfo.id
+                            }
+                        )
+                        await updateDoacao()
                     }}
                 />
             }

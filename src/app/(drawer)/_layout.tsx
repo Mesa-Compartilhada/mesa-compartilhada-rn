@@ -101,6 +101,11 @@ export default function ProtectedLayout() {
                 drawerIcon: ({color, size}) => <MaterialIcons name='food-bank' size={size} color={color} />
                 }} />
             </Drawer.Protected>
+            <Drawer.Protected guard={isLoggedIn && userInfo?.tipo === TipoEmpresa.DOADORA}>
+                <Drawer.Screen name="criar-doacao/index" options={{ title: "Criar doações",
+                drawerIcon: ({color, size}) => <MaterialIcons name='add' size={size} color={color} />
+                }} />
+            </Drawer.Protected>
             <Drawer.Screen name="recuperar-senha/index" options={{ title: "Recuperação de senha",
                 drawerIcon: ({color, size}) => <MaterialIcons name='password' size={size} color={color} />
             }} />

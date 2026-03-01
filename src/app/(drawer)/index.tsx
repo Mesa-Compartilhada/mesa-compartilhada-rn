@@ -3,6 +3,7 @@ import ButtonDefault from "@/src/components/buttons/buttonDefault"
 import { navigate } from "expo-router/build/global-state/routing"
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons"
 import  CustomLogo from "@/src/components/logo/customLogo"
+import Map from "@/src/components/map/map"
 export default function Home() {
     return (
         <View className="p-6 gap-4 justify-center flex-1">

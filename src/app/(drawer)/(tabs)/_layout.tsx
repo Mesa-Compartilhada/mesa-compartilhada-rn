@@ -19,6 +19,10 @@ export default function TabsLayout() {
                 title: "Perfil",
                 tabBarIcon: ({ color, size }) => <MaterialIcons name="account-circle" size={24} color={Colors.azul} />
                 }} initialParams={{userId: userInfo?.id}} />
+            <Tabs.Screen name="mapa" options={{ 
+                title: "Mapa",
+                tabBarIcon: ({ color, size }) => <MaterialIcons name="map" size={24} color={Colors.azul} />
+                }} initialParams={{userId: userInfo?.id}} />
         </Tabs>
     )
 }

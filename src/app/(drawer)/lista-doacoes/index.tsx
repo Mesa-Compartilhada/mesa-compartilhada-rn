@@ -1,4 +1,4 @@
-import InputDefault from "@/components/inputs/inputDefault";
+import InputDefault from "@/src/components/inputs/inputDefault";
 import DoacoesListCompleta from "@/src/components/doacoesList/doacoesListCompleta";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";

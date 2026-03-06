@@ -1,4 +1,4 @@
-import InputDefault from "@/components/inputs/inputDefault"
+import InputDefault from "@/src/components/inputs/inputDefault"
 import { Colors } from "@/src/constants/Colors"
 import { MaterialIcons } from "@expo/vector-icons"
 import { Formik } from "formik"

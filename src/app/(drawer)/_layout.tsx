@@ -8,6 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { PaperProvider } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { TipoEmpresa } from '../../constants/enums';
+import React from 'react';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
     const { isLoggedIn, logoutUser, userInfo } = useAuth()
@@ -17,8 +18,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
         <DrawerContentScrollView>
             <View className={"p-2 my-8 flex flex-row items-center gap-4"}
                 onTouchEnd={() => {    
-                    if(userInfo) {
-                        router.push({pathname: '/(drawer)/perfil/[userId]', params: { userId: userInfo ? userInfo.id : undefined }})
+                    if(userInfo && userInfo.id) {
+                        router.push({pathname: '/(drawer)/perfil/[userId]', params: { userId: userInfo.id }})
                     }
                     else {
                         router.push({pathname: '/login'})
@@ -80,6 +81,9 @@ export default function ProtectedLayout() {
                     drawerIcon: ({color, size}) => <MaterialIcons name='app-registration' size={size} color={color} />
                     }} />
             </Drawer.Protected>
+            <Drawer.Screen name="chat/index" options={{ title: "Chat",
+                drawerIcon: ({color, size}) => <MaterialIcons name='chat' size={size} color={color} />
+                }} />
             <Drawer.Protected guard={isLoggedIn}>
                 <Drawer.Screen name="(tabs)" options={{ title: "Início", headerShown: false, drawerIcon: ({color, size}) => <MaterialIcons name='house' size={size} color={color} /> }} />
                 <Drawer.Screen name="perfil/[userId]" options={{ drawerItemStyle: { display: "none" } }} />

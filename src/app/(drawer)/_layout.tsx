@@ -8,6 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { PaperProvider } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { TipoEmpresa } from '../../constants/enums';
+import { Colors } from '../../constants/Colors';
 import React from 'react';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
@@ -15,8 +16,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
     const router = useRouter()
 
     return (
-        <DrawerContentScrollView>
-            <View className={"p-2 my-8 flex flex-row items-center gap-4"}
+        <DrawerContentScrollView className="bg-branco">
+            <View className="px-6 py-10 mb-4 bg-azul/5 rounded-b-3xl gap-4"
                 onTouchEnd={() => {    
                     if(userInfo && userInfo.id) {
                         router.push({pathname: '/(drawer)/perfil/[userId]', params: { userId: userInfo.id }})
@@ -26,35 +27,39 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                     }
                 }}
             >
-                <View>
+                <View className="shadow-sm">
                     {userInfo?.fotoPerfil ? (
                         <Image
                             key={userInfo.fotoPerfil}
-                            className="w-20 h-20 rounded-full"
+                            className="w-20 h-20 rounded-2xl border-2 border-white"
                             source={{
                             uri: userInfo.fotoPerfil,
                             }}
                         />
                         ) : (
-                        <View className="w-20 h-20 rounded-full bg-gray-600 justify-center items-center">
-                            <MaterialIcons name="account-circle" size={70} color="white" />
+                        <View className="w-20 h-20 rounded-2xl bg-azul justify-center items-center border-2 border-white">
+                            <MaterialIcons name="account-circle" size={50} color="white" />
                         </View>
                         )}
                 </View>
-                <Text className=''>{ userInfo ? userInfo.nome : "Acesse sua conta" }</Text>
+                <View>
+                    <Text className='text-xl font-extrabold text-azulEscuro'>{ userInfo ? userInfo.nome : "Acesse sua conta" }</Text>
+                    {userInfo && <Text className="text-azul text-xs font-semibold uppercase tracking-wider">{userInfo.tipo === TipoEmpresa.DOADORA ? "Doador" : "Instituição"}</Text>}
+                </View>
             </View>
             <DrawerItemList {...props} />
             {
                 isLoggedIn
                 &&
-                <View>
+                <View className="mt-4 pt-4 border-t border-gray-100">
                     <DrawerItem 
                         label="Sair"
+                        labelStyle={{ color: '#FF6600', fontWeight: 'bold' }}
                         onPress={() => logoutUser()}
                         icon={({ color, size }) => <MaterialIcons  
                             name='logout'
                             size={size}
-                            color={color}
+                            color="#FF6600"
                         /> }
                     />
                 </View>
@@ -69,6 +74,35 @@ export default function ProtectedLayout() {
     return (
         <Drawer
             drawerContent={(props) => <CustomDrawerContent {...props} />}
+            screenOptions={{
+                headerShown: true,
+                headerStyle: {
+                    backgroundColor: Colors.branco,
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#f3f4f6',
+                },
+                headerTitleStyle: {
+                    fontWeight: '800',
+                    color: Colors.azulEscuro,
+                },
+                headerTintColor: Colors.azul,
+                drawerActiveBackgroundColor: Colors.azul + '10',
+                drawerActiveTintColor: Colors.azulEscuro,
+                drawerInactiveTintColor: Colors.azul + '90',
+                drawerLabelStyle: {
+                    fontWeight: '700',
+                },
+                drawerStyle: {
+                    width: '80%',
+                },
+                drawerItemStyle: {
+                    borderRadius: 16,
+                    marginHorizontal: 12,
+                    paddingHorizontal: 8,
+                }
+            }}
         >
             <Drawer.Protected guard={!isLoggedIn}>
                 <Drawer.Screen name="index" options={{ title: "Bem-vindo",

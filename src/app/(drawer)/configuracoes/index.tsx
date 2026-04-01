@@ -11,15 +11,38 @@ export default function Configuracoes() {
 
     if(!isLoading && userInfo !== null) {
         return (
-            <View className="gap-4 m-4">
-                <ButtonMenus icon={<MaterialIcons name="account-circle" size={36} color={"gray"} />} title="Conta" onPress={() => {
-                    router.navigate("/conta")
-                }} />
-                <ButtonMenus icon={<MaterialIcons name="password" size={36} color={"gray"} />} title="Esqueci minha senha" onPress={() => {
-                    router.push({pathname: "/recuperar-senha", params: userInfo.email as any })
-                }}/>
-                <ButtonMenus icon={<MaterialIcons name="accessibility-new" size={36} color={"gray"} />} title="Acessibilidade" />
-                <ButtonMenus icon={<MaterialIcons name="info" size={36} color={"gray"} />} title="Sobre e suporte" />
+            <View className="flex-1 bg-branco px-6 py-8 gap-4">
+                <Text className="text-sm font-bold text-azul uppercase tracking-widest ml-1 mb-2">Preferências</Text>
+                
+                <ButtonMenus 
+                    icon={<MaterialIcons name="account-circle" size={24} color="#003B5D" />} 
+                    title="Dados da Conta" 
+                    onPress={() => {
+                        router.navigate("/conta")
+                    }} 
+                />
+                
+                <ButtonMenus 
+                    icon={<MaterialIcons name="lock" size={24} color="#003B5D" />} 
+                    title="Segurança e Senha" 
+                    onPress={() => {
+                        router.push({pathname: "/recuperar-senha", params: userInfo.email as any })
+                    }}
+                />
+                
+                <View className="mt-6 mb-2">
+                    <Text className="text-sm font-bold text-azul uppercase tracking-widest ml-1">Geral</Text>
+                </View>
+
+                <ButtonMenus 
+                    icon={<MaterialIcons name="accessibility-new" size={24} color="#003B5D" />} 
+                    title="Acessibilidade" 
+                />
+                
+                <ButtonMenus 
+                    icon={<MaterialIcons name="info" size={24} color="#003B5D" />} 
+                    title="Sobre e Suporte" 
+                />
             </View>
         )
     }

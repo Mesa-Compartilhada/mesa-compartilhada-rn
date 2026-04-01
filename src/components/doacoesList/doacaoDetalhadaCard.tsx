@@ -4,7 +4,7 @@ import { Doacao } from "@/src/types/doacao";
 import dateFormatter from "@/src/utils/dateFormatter";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, Pressable } from "react-native";
 import { Button } from "react-native-paper";
 import ButtonDefault from "../buttons/buttonDefault";
 import { getDoacaoByFilter, updateStateDoacao } from "@/src/api/services/doacaoService";
@@ -34,169 +34,188 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
     const getStatusStyle = (status: StatusDoacao) => {
         switch (status) {
             case StatusDoacao.DISPONIVEL:
-            return { bg: "bg-yellow-100", text: "text-yellow-800", icon: "#854d0e", iconName: "hourglass-empty" }
+            return { bg: "bg-amber-50", text: "text-amber-600", dot: "bg-amber-500", icon: "#d97706", iconName: "hourglass-empty", label: "Disponível" }
             case StatusDoacao.ANDAMENTO:
-            return { bg: "bg-blue-100", text: "text-blue-800", icon: "#1e40af", iconName: "autorenew" }
+            return { bg: "bg-blue-50", text: "text-blue-600", dot: "bg-blue-500", icon: "#2563eb", iconName: "autorenew", label: "Em Andamento" }
             case StatusDoacao.CONCLUIDA:
-            return { bg: "bg-green-100", text: "text-green-800", icon: "#166534", iconName: "check-circle" }
+            return { bg: "bg-emerald-50", text: "text-emerald-600", dot: "bg-emerald-500", icon: "#059669", iconName: "check-circle", label: "Concluída" }
             case StatusDoacao.CANCELADA:
-            return { bg: "bg-red-100", text: "text-red-800", icon: "#991b1b", iconName: "cancel" }
+            return { bg: "bg-red-50", text: "text-red-600", dot: "bg-red-500", icon: "#dc2626", iconName: "cancel", label: "Cancelada" }
             default:
-            return { bg: "bg-gray-100", text: "text-gray-700", icon: "#374151", iconName: "help-outline" }
+            return { bg: "bg-gray-50", text: "text-gray-600", dot: "bg-gray-500", icon: "#4b5563", iconName: "help-outline", label: status }
         }
     }
 
     const statusStyle = getStatusStyle(doacao.status as StatusDoacao)
 
     return (
-        <View className="gap-4">
-            <View className="bg-coverrounded-2xl items-center">
+        <View className="gap-6 px-6 pt-4">
+            <View className="rounded-[40px] overflow-hidden shadow-lg bg-white border border-gray-100">
                 {
                     doacao.imagemCapa
                     ? (
-                        <Image className="w-96 h-96" source={{ uri: doacao.imagemCapa }} />
-                    )
-                    : (
-                        <View className="w-96 h-96">
-                            <MaterialIcons className="m-auto" name="no-photography" size={256} color={"black"} />
+                        <Image className="w-full h-80" source={{ uri: doacao.imagemCapa }} resizeMode="cover" />
+                    ) : (
+                        <View className="w-full h-80 bg-azul/5 items-center justify-center">
+                            <MaterialIcons name="no-photography" size={100} color="#62C0C0" />
                         </View>
                     )
                 }
-            </View>
-            <View className="flex flex-row justify-between">
-                <Text className="font-extrabold text-3xl text-gray-700 w-2/3">{ doacao.nome }</Text>
-                <Text className="font-extrabold text-3xl text-gray-700">{ doacao.quantidade } { UnidadeMedida[doacao.unidadeMedida] }</Text>
-            </View>
-            <View>
-                <View className="flex flex-row items-center gap-2">
-                    <MaterialIcons name="location-pin" size={24} color={"gray"} /> 
-                    <Text>{ doacao.empresaDoadora.endereco.logradouro }, { doacao.empresaDoadora.endereco.bairro }</Text>
-                </View>
-                <View className="flex flex-row items-center gap-2">
-                    <MaterialIcons name="store" size={24} color={"gray"} /> 
-                    <Text onPress={() => { router.navigate({ pathname: "/(drawer)/perfil/[userId]", params: { userId: empresaDoadora.id } }) }}>{ empresaDoadora.nome }</Text>
-                </View>
-            </View>
-
-            <View>
-                <Text>
-                    Validade: { dateFormatter(doacao.dataValidade) }
-                </Text>
-                <Text>
-                    Fabricação: { dateFormatter(doacao.dataFabricacao) }
-                </Text>
-            </View>
-            {
-                userInfo?.tipo === TipoEmpresa.RECEBEDORA
-                && doacao.status === StatusDoacao.DISPONIVEL
-                && 
-                <ButtonDefault 
-                    title="Solicitar"
-                    icon={<MaterialIcons name="add" size={36} color={"white"} />}
-                    onPress={async () => {
-                        const result = await updateStateDoacao(doacao.id, 
-                            {
-                                status: StatusDoacao.ANDAMENTO,
-                                empresaRecebedoraId: userInfo.id,
-                                empresaSolicitanteId: userInfo.id
-                            }
-                        )
-                        await updateDoacao()
-                    }}
-                />
-            }
-            {
-                userInfo?.tipo === TipoEmpresa.RECEBEDORA
-                && doacao.status === StatusDoacao.ANDAMENTO
-                && doacao.empresaRecebedora && doacao.empresaRecebedora.id === userInfo.id
-                && 
-                <ButtonDefault 
-                    title="Confirmar recebimento"
-                    icon={<MaterialIcons name="add" size={36} color={"white"} />}
-                    onPress={async () => {
-                        const result = await updateStateDoacao(doacao.id, 
-                            {
-                                status: StatusDoacao.CONCLUIDA,
-                                empresaRecebedoraId: userInfo.id,
-                                empresaSolicitanteId: userInfo.id
-                            }
-                        )
-                        await updateDoacao()
-                    }}
-                />
-            }
-            {
-                userInfo?.tipo === TipoEmpresa.RECEBEDORA
-                && doacao.status === StatusDoacao.ANDAMENTO
-                && doacao.empresaRecebedora && doacao.empresaRecebedora.id === userInfo.id
-                && 
-                <ButtonDefault 
-                    title="Cancelar solicitação"
-                    icon={<MaterialIcons name="add" size={36} color={"white"} />}
-                    onPress={async () => {
-                        const result = await updateStateDoacao(doacao.id, 
-                            {
-                                status: StatusDoacao.DISPONIVEL,
-                                empresaRecebedoraId: userInfo.id,
-                                empresaSolicitanteId: userInfo.id
-                            }
-                        )
-                        await updateDoacao()
-                    }}
-                />
-            }
-            {
-                userInfo?.tipo === TipoEmpresa.DOADORA
-                && doacao.status === StatusDoacao.ANDAMENTO
-                && 
-                <ButtonDefault 
-                    title="Confirmar"
-                    icon={<MaterialIcons name="add" size={36} color={"white"} />}
-                    onPress={async () => {
-                        const result = await updateStateDoacao(doacao.id, 
-                            {
-                                status: StatusDoacao.CONCLUIDA,
-                                empresaRecebedoraId: doacao.empresaRecebedora.id,
-                                empresaSolicitanteId: userInfo.id
-                            }
-                        )
-                        await updateDoacao()
-                    }}
-                />
-            }
-            <View className={`items-center rounded-2xl p-2 shadow ${statusStyle.bg}`}>
-                <MaterialIcons name={statusStyle.iconName as any} size={36} color={statusStyle.icon} />
-                <Text className={`font-semibold text-center mt-2 ${statusStyle.text}`}>
-                {doacao.status}
-                </Text>
-            </View>
-            <View className="flex-row justify-around gap-4">
-                <View className="flex-1 items-center bg-green-100 rounded-2xl p-2 shadow">
-                    <MaterialIcons name="food-bank" size={36} color="#166534" />
-                    <Text className="text-green-900 font-semibold text-center mt-2">
-                    {TipoAlimento[doacao.tipoAlimento]}
-                    </Text>
-                </View>
-
-                <View className="flex-1 items-center bg-blue-100 rounded-2xl p-2 shadow">
-                    <MaterialIcons name="inventory" size={36} color="#1e3a8a" />
-                    <Text className="text-blue-900 font-semibold text-center mt-2">
-                    {TipoArmazenamento[doacao.tipoArmazenamento]}
+                <View className={`absolute top-4 right-4 px-4 py-2 rounded-2xl ${statusStyle.bg} flex-row items-center gap-2 shadow-sm`}>
+                    <View className={`w-2 h-2 rounded-full ${statusStyle.dot}`} />
+                    <Text className={`font-bold text-xs uppercase tracking-widest ${statusStyle.text}`}>
+                        {statusStyle.label}
                     </Text>
                 </View>
             </View>
-            
-            <View>
-                <Text className="text-3xl text-gray-700">Descrição:</Text>
-                <Text className="text-gray-700">
-                    { doacao.descricao }
-                </Text>
+
+            <View className="gap-2">
+                <View className="flex-row justify-between items-start">
+                    <Text className="font-black text-3xl text-azulEscuro flex-1 leading-tight">{ doacao.nome }</Text>
+                    <View className="bg-lAbobora/10 px-4 py-2 rounded-2xl">
+                        <Text className="font-black text-xl text-lAbobora">{ doacao.quantidade } { UnidadeMedida[doacao.unidadeMedida] }</Text>
+                    </View>
+                </View>
+                
+                <View className="flex-row items-center gap-2 mt-2">
+                    <View className="p-1.5 bg-azul/10 rounded-lg">
+                        <MaterialIcons name="location-pin" size={18} color="#62C0C0" /> 
+                    </View>
+                    <Text className="text-gray-500 font-medium flex-1">
+                        { doacao.empresaDoadora.endereco.logradouro }, { doacao.empresaDoadora.endereco.bairro }
+                    </Text>
+                </View>
+
+                <Pressable 
+                    className="flex-row items-center gap-2"
+                    onPress={() => { router.navigate({ pathname: "/(drawer)/perfil/[userId]", params: { userId: empresaDoadora.id } }) }}
+                >
+                    <View className="p-1.5 bg-azul/10 rounded-lg">
+                        <MaterialIcons name="store" size={18} color="#62C0C0" /> 
+                    </View>
+                    <Text className="text-azul font-bold">{ empresaDoadora.nome }</Text>
+                </Pressable>
             </View>
-            <View>
-                <Text className="text-3xl text-gray-700">Observações:</Text>
-                <Text className="text-gray-700">
-                    { doacao.observacao }
-                </Text>
+
+            <View className="flex-row gap-4">
+                <View className="flex-1 bg-white p-4 rounded-3xl border border-gray-100 shadow-sm items-center gap-2">
+                    <MaterialIcons name="restaurant" size={24} color="#62C0C0" />
+                    <Text className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Alimento</Text>
+                    <Text className="text-azulEscuro font-bold text-center">{TipoAlimento[doacao.tipoAlimento]}</Text>
+                </View>
+
+                <View className="flex-1 bg-white p-4 rounded-3xl border border-gray-100 shadow-sm items-center gap-2">
+                    <MaterialIcons name="inventory" size={24} color="#003B5D" />
+                    <Text className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Estocagem</Text>
+                    <Text className="text-azulEscuro font-bold text-center">{TipoArmazenamento[doacao.tipoArmazenamento]}</Text>
+                </View>
+            </View>
+
+            <View className="bg-azulEscuro/5 p-6 rounded-[32px] gap-4 border border-azulEscuro/5">
+                <View className="flex-row justify-between border-b border-azulEscuro/10 pb-4">
+                    <View className="gap-1">
+                        <Text className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Fabricação</Text>
+                        <Text className="text-azulEscuro font-bold">{ dateFormatter(doacao.dataFabricacao) }</Text>
+                    </View>
+                    <View className="gap-1 items-end">
+                        <Text className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Validade</Text>
+                        <Text className="text-lAbobora font-bold">{ dateFormatter(doacao.dataValidade) }</Text>
+                    </View>
+                </View>
+                
+                <View className="gap-1">
+                    <Text className="text-lg font-bold text-azulEscuro">Descrição</Text>
+                    <Text className="text-gray-500 leading-6 font-medium">
+                        { doacao.descricao }
+                    </Text>
+                </View>
+
+                {doacao.observacao && (
+                    <View className="gap-1">
+                        <Text className="text-lg font-bold text-azulEscuro">Observações</Text>
+                        <Text className="text-gray-500 leading-6 font-medium italic">
+                            "{ doacao.observacao }"
+                        </Text>
+                    </View>
+                )}
+            </View>
+
+            <View className="gap-4 mt-2">
+                {
+                    userInfo?.tipo === TipoEmpresa.RECEBEDORA
+                    && doacao.status === StatusDoacao.DISPONIVEL
+                    && 
+                    <ButtonDefault 
+                        title="Solicitar Doação"
+                        icon={<MaterialIcons name="add-circle" size={24} color="white" />}
+                        onPress={async () => {
+                            await updateStateDoacao(doacao.id, 
+                                {
+                                    status: StatusDoacao.ANDAMENTO,
+                                    empresaRecebedoraId: userInfo.id,
+                                    empresaSolicitanteId: userInfo.id
+                                }
+                            )
+                            await updateDoacao()
+                        }}
+                    />
+                }
+                {
+                    userInfo?.tipo === TipoEmpresa.RECEBEDORA
+                    && doacao.status === StatusDoacao.ANDAMENTO
+                    && doacao.empresaRecebedora && doacao.empresaRecebedora.id === userInfo.id
+                    && 
+                    <View className="gap-3">
+                        <ButtonDefault 
+                            title="Confirmar Recebimento"
+                            icon={<MaterialIcons name="check-circle" size={24} color="white" />}
+                            onPress={async () => {
+                                await updateStateDoacao(doacao.id, 
+                                    {
+                                        status: StatusDoacao.CONCLUIDA,
+                                        empresaRecebedoraId: userInfo.id,
+                                        empresaSolicitanteId: userInfo.id
+                                    }
+                                )
+                                await updateDoacao()
+                            }}
+                        />
+                        <Pressable 
+                            className="bg-red-50 p-4 rounded-2xl items-center justify-center border border-red-100"
+                            onPress={async () => {
+                                await updateStateDoacao(doacao.id, 
+                                    {
+                                        status: StatusDoacao.DISPONIVEL,
+                                        empresaRecebedoraId: userInfo.id,
+                                        empresaSolicitanteId: userInfo.id
+                                    }
+                                )
+                                await updateDoacao()
+                            }}
+                        >
+                            <Text className="text-red-600 font-bold">Cancelar Solicitação</Text>
+                        </Pressable>
+                    </View>
+                }
+                {
+                    userInfo?.tipo === TipoEmpresa.DOADORA
+                    && doacao.status === StatusDoacao.ANDAMENTO
+                    && 
+                    <ButtonDefault 
+                        title="Confirmar Entrega"
+                        icon={<MaterialIcons name="verified" size={24} color="white" />}
+                        onPress={async () => {
+                            await updateStateDoacao(doacao.id, 
+                                {
+                                    status: StatusDoacao.CONCLUIDA,
+                                    empresaRecebedoraId: doacao.empresaRecebedora.id,
+                                    empresaSolicitanteId: userInfo.id
+                                }
+                            )
+                            await updateDoacao()
+                        }}
+                    />
+                }
             </View>
         </View>
     )

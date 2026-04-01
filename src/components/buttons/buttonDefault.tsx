@@ -7,8 +7,13 @@ type Props = {
 
 export default function ButtonDefault({ title, icon, ...rest }: Props) {
     return (
-        <TouchableOpacity className={`bg-azul p-3 rounded-lg flex-row gap-4 items-center justify-center`} onPress={rest.onPress} activeOpacity={0.7} { ...rest } >
-            <Text className="text-2xl text-white font-medium text-center">{ title }</Text>
+        <TouchableOpacity 
+            className="bg-lAbobora p-4 rounded-2xl flex-row gap-3 items-center justify-center shadow-sm" 
+            onPress={rest.onPress} 
+            activeOpacity={0.8} 
+            { ...rest } 
+        >
+            <Text className="text-xl text-white font-bold text-center tracking-wide">{ title }</Text>
             {icon}
         </TouchableOpacity>
     )

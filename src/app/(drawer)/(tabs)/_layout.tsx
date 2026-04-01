@@ -9,19 +9,33 @@ export default function TabsLayout() {
 
     return (
         <Tabs screenOptions={{
-            headerLeft: () => <DrawerToggleButton />
+            headerLeft: () => <DrawerToggleButton />,
+            tabBarActiveTintColor: Colors.azulEscuro,
+            tabBarInactiveTintColor: Colors.azul + '80',
+            tabBarStyle: {
+                backgroundColor: Colors.branco,
+                borderTopWidth: 0,
+                elevation: 0,
+                shadowOpacity: 0,
+                height: 60,
+                paddingBottom: 8
+            },
+            tabBarLabelStyle: {
+                fontWeight: 'bold',
+                fontSize: 12
+            }
         }}>
             <Tabs.Screen name="dashboard" options={{ 
                 title: "Dashboard",
-                tabBarIcon: ({ color, size }) => <MaterialIcons name="dashboard" size={24} color={Colors.azul} />
+                tabBarIcon: ({ color, size }) => <MaterialIcons name="dashboard" size={24} color={color} />
                 }} />
             <Tabs.Screen name="perfil" options={{ 
                 title: "Perfil",
-                tabBarIcon: ({ color, size }) => <MaterialIcons name="account-circle" size={24} color={Colors.azul} />
+                tabBarIcon: ({ color, size }) => <MaterialIcons name="account-circle" size={24} color={color} />
                 }} initialParams={{userId: userInfo?.id}} />
             <Tabs.Screen name="mapa" options={{ 
                 title: "Mapa",
-                tabBarIcon: ({ color, size }) => <MaterialIcons name="map" size={24} color={Colors.azul} />
+                tabBarIcon: ({ color, size }) => <MaterialIcons name="explore" size={24} color={color} />
                 }} initialParams={{userId: userInfo?.id}} />
         </Tabs>
     )

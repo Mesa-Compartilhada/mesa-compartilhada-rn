@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Empresa, EmpresaLogin } from "../types/empresa";
 import { deleteToken, getToken, saveToken } from "../storage/secureStore";
 import { login } from "../api/services/authService";
@@ -30,7 +30,7 @@ type TAuthProvider = {
 
 export const AuthProvider = ({ children }: TAuthProvider) => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true)
     const [userInfo, setUserInfo] = useState<Empresa | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
 

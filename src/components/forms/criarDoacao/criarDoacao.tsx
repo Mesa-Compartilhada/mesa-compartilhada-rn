@@ -1,3 +1,4 @@
+import React from "react";
 import InputDefault from "@/src/components/inputs/inputDefault";
 import { Colors } from "@/src/constants/Colors";
 import { MaterialIcons, Entypo,  } from "@expo/vector-icons";
@@ -48,244 +49,220 @@ export default function CriarDoacao() {
     }
 
     return (
-        <Formik
-        initialValues={{
-            nome: "",
-            descricao: "",
-            observacao: "",
-            dataFabricacao: "",
-            dataValidade: "",
-            dataMaxRetirada: "",
-            horarioMin: "",
-            horarioMax: "",
-            tipo: 0,
-            categoria: 0,
-            quantidade: "",
-            unidadeMedida: "",
-            imagemCapa: "",
-        }}
-        validationSchema={schema}
-        validateOnChange={false}
-        validateOnBlur={true} 
-        onSubmit={ values => {
-            const cadastrar = async () => {
-               
-            }
-            cadastrar()
-        }}>
-            {({ 
-                values,
-                errors,
-                touched,
-                isValid,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                setFieldValue
-            }) => (
-                <KeyboardAvoidingView 
-                    className="flex-1 w-full px-4"
-                    behavior={Platform.OS == 'ios' ? 'padding' : 'height'}    
-                >
-                    <ScrollView className="flex-1 flex-col p-4">
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Nome Doação:</Text>
-                            <InputDefault 
-                                value={values.nome}
-                                onChangeText={handleChange("nome-doacao")}
-                                onBlur={handleBlur("nome-doacao")}
-                                Icon={ 
-                                    <MaterialIcons 
-                                    name="cake"
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="Bolo de Morango"
-                                error={ touched.nome ? errors.nome : undefined}
-                                autoCapitalize="none" 
-                                />
-                        </View>
+        <View className="flex-1 bg-branco">
+            <Formik
+            initialValues={{
+                nome: "",
+                descricao: "",
+                observacao: "",
+                dataFabricacao: "",
+                dataValidade: "",
+                dataMaxRetirada: "",
+                horarioMin: "",
+                horarioMax: "",
+                tipo: 0,
+                categoria: 0,
+                quantidade: "",
+                unidadeMedida: "",
+                imagemCapa: "",
+            }}
+            validationSchema={schema}
+            validateOnChange={false}
+            validateOnBlur={true} 
+            onSubmit={ values => {
+                const cadastrar = async () => {
+                
+                }
+                cadastrar()
+            }}>
+                {({ 
+                    values,
+                    errors,
+                    touched,
+                    isValid,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    setFieldValue
+                }) => (
+                    <KeyboardAvoidingView 
+                        className="flex-1"
+                        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}    
+                    >
+                        <ScrollView 
+                            className="flex-1" 
+                            contentContainerStyle={{ padding: 24, gap: 24 }}
+                        >
+                            <View className="gap-6">
+                                <View className="gap-2">
+                                    <Text className="text-lg font-bold text-azulEscuro ml-1">Informações Básicas</Text>
+                                    <View className="gap-4 bg-azul/5 p-4 rounded-3xl border border-azul/10">
+                                        <View className="gap-1">
+                                            <Text className="text-sm font-semibold text-gray-500 ml-1">Nome da Doação</Text>
+                                            <InputDefault 
+                                                value={values.nome}
+                                                onChangeText={handleChange("nome")}
+                                                onBlur={handleBlur("nome")}
+                                                Icon={<MaterialIcons name="cake" color="#62C0C0" size={24} />} 
+                                                placeholder="Ex: Bolo de Morango"
+                                                error={ touched.nome ? errors.nome : undefined}
+                                            />
+                                        </View>
+                                        <View className="gap-1">
+                                            <Text className="text-sm font-semibold text-gray-500 ml-1">Descrição</Text>
+                                            <InputDefault 
+                                                value={values.descricao}
+                                                onChangeText={handleChange("descricao")}
+                                                onBlur={handleBlur("descricao")}
+                                                Icon={<MaterialIcons name="description" color="#62C0C0" size={24} />} 
+                                                placeholder="Ex: Com calda de morango"
+                                                error={ touched.descricao ? errors.descricao : undefined }
+                                            />
+                                        </View>
+                                        <View className="gap-1">
+                                            <Text className="text-sm font-semibold text-gray-500 ml-1">Observações</Text>
+                                            <InputDefault 
+                                                value={values.observacao}
+                                                onChangeText={handleChange("observacao")}
+                                                onBlur={handleBlur("observacao")}
+                                                Icon={<MaterialIcons name="info" color="#62C0C0" size={24} />} 
+                                                placeholder="Ex: Sem glúten"
+                                                error={ touched.observacao ? errors.observacao : undefined }
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
 
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Descrição de Doação:</Text>
-                            <InputDefault 
-                                value={values.descricao}
-                                onChangeText={handleChange("descricaoDoacao")}
-                                onBlur={handleBlur("descricaoDoacao")}
-                                Icon={ 
-                                    <MaterialIcons 
-                                    name="description" 
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="Com calda de morango"
-                                error={ touched.descricao ? errors.descricao : undefined }
-                                autoCapitalize="none" 
-                                />
-                        </View>
-                        
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Observação Doação:</Text>
-                            <InputDefault 
-                                value={values.observacao}
-                                onChangeText={handleChange("observacaoDoacao")}
-                                onBlur={handleBlur("observacaoDoacao")}
-                                Icon={ 
-                                    <MaterialIcons 
-                                    name="search" 
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="Sem glúten"
-                                autoCapitalize="none" 
-                                error={ touched.observacao ? errors.observacao : undefined }
-                                />
-                        </View>
-                        
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Data de Fabricação:</Text>
-                            <InputDefault 
-                                value={values.dataFabricacao}
-                                onChangeText={handleChange("dataFabricacao")}
-                                onBlur={handleBlur("dataFabricacao")}
-                                Icon={
-                                    <MaterialIcons 
-                                    name="calendar-month" 
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="00/00/0000" 
-                                error={errors.dataFabricacao}
-                                autoCapitalize="none"
-                                dataDetectorTypes={"calendarEvent"}
-                                />
-                        </View>
-                        
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Data de Validade:</Text>
-                            <InputDefault 
-                                value={values.dataValidade}
-                                onChangeText={handleChange("dataValidade")}
-                                onBlur={handleBlur("dataValidade")}
-                                Icon={
-                                    <MaterialIcons 
-                                    name="calendar-month" 
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="00/00/0000" 
-                                error={errors.dataValidade}
-                                autoCapitalize="none"
-                                />
-                        </View>
+                                <View className="gap-2">
+                                    <Text className="text-lg font-bold text-azulEscuro ml-1">Datas e Prazos</Text>
+                                    <View className="gap-4 bg-azul/5 p-4 rounded-3xl border border-azul/10">
+                                        <View className="flex-row gap-4">
+                                            <View className="flex-1 gap-1">
+                                                <Text className="text-sm font-semibold text-gray-500 ml-1">Fabricação</Text>
+                                                <InputDefault 
+                                                    value={values.dataFabricacao}
+                                                    onChangeText={handleChange("dataFabricacao")}
+                                                    onBlur={handleBlur("dataFabricacao")}
+                                                    Icon={<MaterialIcons name="calendar-today" color="#62C0C0" size={20} />} 
+                                                    placeholder="DD/MM/AAAA" 
+                                                    error={errors.dataFabricacao}
+                                                />
+                                            </View>
+                                            <View className="flex-1 gap-1">
+                                                <Text className="text-sm font-semibold text-gray-500 ml-1">Validade</Text>
+                                                <InputDefault 
+                                                    value={values.dataValidade}
+                                                    onChangeText={handleChange("dataValidade")}
+                                                    onBlur={handleBlur("dataValidade")}
+                                                    Icon={<MaterialIcons name="event" color="#62C0C0" size={20} />} 
+                                                    placeholder="DD/MM/AAAA" 
+                                                    error={errors.dataValidade}
+                                                />
+                                            </View>
+                                        </View>
+                                        <View className="gap-1">
+                                            <Text className="text-sm font-semibold text-gray-500 ml-1">Limite para Retirada</Text>
+                                            <InputDefault 
+                                                value={values.dataMaxRetirada}
+                                                onChangeText={handleChange("dataMaxRetirada")}
+                                                onBlur={handleBlur("dataMaxRetirada")}
+                                                Icon={<MaterialIcons name="access-alarm" color="#62C0C0" size={24} />} 
+                                                placeholder="DD/MM/AAAA" 
+                                                error={errors.dataMaxRetirada}
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
 
+                                <View className="gap-2">
+                                    <Text className="text-lg font-bold text-azulEscuro ml-1">Horários de Retirada</Text>
+                                    <View className="flex-row gap-4 bg-azul/5 p-4 rounded-3xl border border-azul/10">
+                                        <View className="flex-1 gap-1">
+                                            <Text className="text-sm font-semibold text-gray-500 ml-1">De</Text>
+                                            <InputDefault 
+                                                value={values.horarioMin}
+                                                onChangeText={handleChange("horarioMin")}
+                                                onBlur={handleBlur("horarioMin")}
+                                                Icon={<MaterialIcons name="timer" color="#62C0C0" size={20} />} 
+                                                placeholder="08:00" 
+                                                error={errors.horarioMin}
+                                            />
+                                        </View>
+                                        <View className="flex-1 gap-1">
+                                            <Text className="text-sm font-semibold text-gray-500 ml-1">Até</Text>
+                                            <InputDefault 
+                                                value={values.horarioMax}
+                                                onChangeText={handleChange("horarioMax")}
+                                                onBlur={handleBlur("horarioMax")}
+                                                Icon={<MaterialIcons name="timer-off" color="#62C0C0" size={20} />} 
+                                                placeholder="18:00" 
+                                                error={errors.horarioMax}
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
 
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Data máxima para retirada:</Text>
-                            <InputDefault 
-                                value={values.dataMaxRetirada}
-                                onChangeText={handleChange("dataValidade")}
-                                onBlur={handleBlur("dataValidade")}
-                                Icon={
-                                    <MaterialIcons 
-                                    name="calendar-month" 
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="00/00/0000" 
-                                error={errors.dataMaxRetirada}
-                                autoCapitalize="none"
-                                />
-                        </View>
+                                <View className="gap-4">
+                                    <ImagePickerButton callback={(base64) => {
+                                        if(base64) {
+                                            setFieldValue("imagemCapa", base64)
+                                        }
+                                    }} />
 
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Horário mínimo para retirada:</Text>
-                            <InputDefault 
-                                value={values.horarioMin}
-                                onChangeText={handleChange("horarioMinRetirada")}
-                                onBlur={handleBlur("horarioMinRetirada")}
-                                Icon={
-                                    <MaterialIcons 
-                                    name="timer" 
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="00h00m BRT" 
-                                error={errors.horarioMin}
-                                autoCapitalize="none"
-                                />
-                        </View>
+                                    <View className="gap-2">
+                                        <Text className="text-sm font-bold text-azulEscuro ml-1">Tipo de Alimento</Text>
+                                        <PickerDefault values={TipodoAlimento} onChange={(key) => setFieldValue("tipo", key)} />
+                                    </View>
 
-                         <View>
-                            <Text className="text-lg font-bolder text-gray-700">Horário máximo para retirada:</Text>
-                            <InputDefault 
-                                value={values.horarioMax}
-                                onChangeText={handleChange("horarioMaxRetirada")}
-                                onBlur={handleBlur("horarioMaxRetirada")}
-                                Icon={
-                                    <MaterialIcons 
-                                    name="timer" 
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="00h00m BRT" 
-                                error={errors.horarioMax}
-                                autoCapitalize="none"
-                                />
-                        </View>
+                                    <View className="gap-2">
+                                        <Text className="text-sm font-bold text-azulEscuro ml-1">Armazenamento</Text>
+                                        <PickerDefault values={TipodeArmazenamento} onChange={(key) => setFieldValue("categoria", key)} />
+                                    </View>
+                                </View>
 
-                        <ImagePickerButton callback={(base64) => {
-                            if(base64) {
-                                setFieldValue("imagemCapa", base64)
-                            }
-                        }} />
+                                <View className="gap-2">
+                                    <Text className="text-lg font-bold text-azulEscuro ml-1">Quantidade e Medida</Text>
+                                    <View className="flex-row gap-4 bg-azul/5 p-4 rounded-3xl border border-azul/10">
+                                        <View className="flex-1 gap-1">
+                                            <Text className="text-sm font-semibold text-gray-500 ml-1">Valor</Text>
+                                            <InputDefault 
+                                                value={values.quantidade}
+                                                onChangeText={handleChange("quantidade")}
+                                                onBlur={handleBlur("quantidade")}
+                                                Icon={<MaterialIcons name="monitor-weight" color="#62C0C0" size={20} />} 
+                                                placeholder="Ex: 10" 
+                                                error={errors.quantidade}
+                                                keyboardType="number-pad"
+                                            />
+                                        </View>
+                                        <View className="flex-1 gap-1">
+                                            <Text className="text-sm font-semibold text-gray-500 ml-1">Unidade</Text>
+                                            <InputDefault 
+                                                value={values.unidadeMedida}
+                                                onChangeText={handleChange("unidadeMedida")}
+                                                onBlur={handleBlur("unidadeMedida")}
+                                                Icon={<Entypo name="ruler" color="#62C0C0" size={20} />} 
+                                                placeholder="Ex: kg" 
+                                                error={errors.unidadeMedida}
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
 
-                        <Text className="text-lg font-bolder text-gray-700">Tipo de Alimento:</Text>
-                        <PickerDefault values={TipodoAlimento} onChange={(key) => setFieldValue("tipo", key)} />
-
-                        <Text className="text-lg font-bolder text-gray-700">Tipo de Armazenamento:</Text>
-                        <PickerDefault values={TipodeArmazenamento} onChange={(key) => setFieldValue("categoria", key)} />
-
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Quantidade Doação:</Text>
-                            <InputDefault 
-                                value={values.quantidade}
-                                
-                                onChangeText={handleChange("quantidade")}
-                                onBlur={handleBlur("quantidade")}
-                                Icon={
-                                    <MaterialIcons 
-                                    name="monitor-weight"  
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="00000000" 
-                                error={errors.quantidade}
-                                autoCapitalize="none"
-                                keyboardType="number-pad"
-                            />
-                        </View>
-
-                        <View>
-                            <Text className="text-lg font-bolder text-gray-700">Unidade de Medida (kg,gr,l)</Text>
-                            <InputDefault 
-                                value={values.unidadeMedida}
-                                onChangeText={handleChange("unidadeMedida")}
-                                onBlur={handleBlur("unidadeMedida")}
-                                Icon={
-                                    <Entypo 
-                                    name="ruler" 
-                                    color={Colors.azul} 
-                                size={24} />} 
-                                placeholder="000" 
-                                error={errors.unidadeMedida}
-                                autoCapitalize="none"
-                                />
-                        </View>
-                    </ScrollView>
-                    <View className="mb-8">
-                        <ButtonDefault 
-                            icon={<MaterialIcons name="login" size={24} color={"white"} />}
-                            title="Cadastrar"
-                            onPress={handleSubmit as any} // handleSubmit sem 'as any' causa um erro de tipagem, apesar de não afetar o funcionamento
-                        />
-                    </View>
-                    <Snackbar children={msg} visible={msg.length >= 1} onDismiss={() => { setMsg("") }} />
-                </KeyboardAvoidingView>
-            )
-            }
-        </Formik>
-        
+                                <View className="mt-4 mb-10">
+                                    <ButtonDefault 
+                                        icon={<MaterialIcons name="check-circle" size={24} color="white" />}
+                                        title="Criar Doação"
+                                        onPress={handleSubmit as any}
+                                    />
+                                </View>
+                            </View>
+                        </ScrollView>
+                        <Snackbar children={msg} visible={msg.length >= 1} onDismiss={() => { setMsg("") }} />
+                    </KeyboardAvoidingView>
+                )
+                }
+            </Formik>
+        </View>
     )
 }

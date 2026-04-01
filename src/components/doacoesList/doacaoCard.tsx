@@ -12,53 +12,66 @@ export default function DoacaoCard({ doacao }: Props) {
 
     if(doacao) {
       return (
-        <View className="min-w-64 max-w-64 bg-white rounded-xl shadow-gray-300 shadow-md my-6">
-          <Pressable onPress={ () => router.push({
-                    pathname: '/doacao/[doacao]',
-                    params: { doacao: JSON.stringify(doacao) }
-                  }) }>
-          {
-            doacao
-            && doacao.imagemCapa
-            && doacao.imagemCapa.length > 0
-                  ? (
-                      <ImageBackground className="w-full h-52 rounded-xl" source={{ uri: doacao.imagemCapa }} />
-                  )
-                  : (
-                      <View className="w-52 h-52 m-auto">
-                          <MaterialIcons className="m-auto" name="no-photography" size={100} color={"black"} />
-                      </View>
-                  )
-          }
-        </Pressable>
-        <View className="my-2">
-          <Text numberOfLines={1} className="text-xl font-bold text-center">{ doacao.nome }</Text>
-          <Text
-              className="btnText text-center"
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              onPress={() => {
-                router.push({
-                    pathname: "/(drawer)/perfil/[userId]",
-                  params: { userId: doacao.empresaDoadora.id }
-                })
-              }}
-            >
-              {doacao.empresaDoadora ? doacao.empresaDoadora.nome : ""}
-            </Text>
-          <Text
-            className="btnText text-center"
-            onPress={() => {
-              router.push({
-                pathname: "/(drawer)/perfil/[userId]",
-                params: { userId: doacao.empresaRecebedora.id }
-              })
-            }}
+        <View className="min-w-[280px] max-w-[280px] bg-white rounded-3xl shadow-sm border border-gray-100 my-4 overflow-hidden">
+          <Pressable 
+            onPress={ () => router.push({
+              pathname: '/doacao/[doacao]',
+              params: { doacao: JSON.stringify(doacao) }
+            }) }
+            activeOpacity={0.9}
           >
-            {doacao.empresaRecebedora ? doacao.empresaRecebedora.nome : ""}
-          </Text>
+            {
+              doacao && doacao.imagemCapa && doacao.imagemCapa.length > 0
+                ? (
+                    <ImageBackground className="w-full h-48 rounded-t-3xl" source={{ uri: doacao.imagemCapa }} />
+                )
+                : (
+                    <View className="w-full h-48 bg-lPessego/30 items-center justify-center">
+                        <MaterialIcons name="no-photography" size={60} color="#62C0C0" />
+                    </View>
+                )
+            }
+          </Pressable>
+          
+          <View className="p-4 gap-2">
+            <Text numberOfLines={1} className="text-xl font-bold text-azulEscuro">{ doacao.nome }</Text>
+            
+            <View className="flex-row items-center gap-1">
+              <MaterialIcons name="business" size={16} color="#62C0C0" />
+              <Text
+                  className="text-azul font-semibold text-sm flex-1"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  onPress={() => {
+                    router.push({
+                      pathname: "/(drawer)/perfil/[userId]",
+                      params: { userId: doacao.empresaDoadora.id }
+                    })
+                  }}
+                >
+                  {doacao.empresaDoadora ? doacao.empresaDoadora.nome : "Doador desconhecido"}
+                </Text>
+            </View>
+
+            {doacao.empresaRecebedora && (
+              <View className="flex-row items-center gap-1">
+                <MaterialIcons name="handshake" size={16} color="#FF6600" />
+                <Text
+                  className="text-lAbobora font-semibold text-sm flex-1"
+                  numberOfLines={1}
+                  onPress={() => {
+                    router.push({
+                      pathname: "/(drawer)/perfil/[userId]",
+                      params: { userId: doacao.empresaRecebedora.id }
+                    })
+                  }}
+                >
+                  {doacao.empresaRecebedora.nome}
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    )
+      )
     }
 }

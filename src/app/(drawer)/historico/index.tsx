@@ -5,7 +5,8 @@ import { useAuth } from "@/src/context/AuthContext";
 import { Doacao } from "@/src/types/doacao";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, ScrollView } from "react-native";
+import CustomHeader from "@/src/components/header/customHeader";
 
 export default function Historico() {
 
@@ -29,25 +30,27 @@ export default function Historico() {
                         empresaRecebedoraId: userInfo.id
                     })
                 }
-                setDoacoes(res)
+                setDoacoes(res || [])
             }
             fetch()
         }
     }, [])
 
-    if(doacoes.length > 0) {
-        return (
-            <View>
+    return (
+        <ScrollView className="flex-1 bg-branco">
+            <CustomHeader icon={<MaterialIcons name="history" size={28} color="#003B5D" />} title="Histórico" />
+            
+            {doacoes.length > 0 ? (
                 <HistoricoList doacoes={doacoes} />
-            </View>
-        )
-    }
-    else if(doacoes.length <= 0) {
-        return (
-            <View>
-                <MaterialIcons name="no-food" color={"white"} size={24} />
-                <Text className="font-bold text-center">Não há doações</Text>
-            </View>
-        )
-    }
+            ) : (
+                <View className="flex-1 items-center justify-center p-20 gap-4">
+                    <View className="p-8 bg-azul/10 rounded-full">
+                        <MaterialIcons name="no-food" color="#62C0C0" size={64} />
+                    </View>
+                    <Text className="font-extrabold text-xl text-azulEscuro text-center">Nenhuma doação encontrada</Text>
+                    <Text className="text-gray-400 text-center font-medium">Seu histórico de doações concluídas ou canceladas aparecerá aqui.</Text>
+                </View>
+            )}
+        </ScrollView>
+    )
 }

@@ -35,60 +35,69 @@ export default function Dashboard() {
 
     if(isLoggedIn && userInfo && userInfo.tipo === TipoEmpresa.DOADORA) {
         return (
-            <ScrollView className="flex p-12 gap-16">
-                <View>
+            <ScrollView className="flex-1 bg-branco">
+                <View className="p-6 gap-8">
+                    <View>
+                        <Text className="text-3xl font-extrabold text-azulEscuro mb-2">Dashboard</Text>
+                        <Text className="text-gray-500 text-lg">Olá, {userInfo.nome}! 👋</Text>
+                    </View>
+
                     {
                         doacoes && doacoes.length > 0
                         &&
-                        <>
-                            <Text className="text-2xl">Sua doação mais recente:</Text>
-                            <DoacaoCard doacao={ doacoes[0] } />
-                        </>
+                        <View className="gap-3">
+                            <Text className="text-xl font-bold text-azulEscuro">Sua doação mais recente:</Text>
+                            <View className="items-center">
+                                <DoacaoCard doacao={ doacoes[0] } />
+                            </View>
+                        </View>
                     }
-                </View>
 
-                <View>
-                    <Text className="text-2xl">Suas doações em andamento:</Text>
-                    <DoacoesList filters={ { status: [ "ANDAMENTO" ], empresaDoadoraId: userInfo.id } } />
+                    <View className="gap-4">
+                        <Text className="text-xl font-bold text-azulEscuro">Suas doações em andamento:</Text>
+                        <DoacoesList filters={ { status: [ "ANDAMENTO" ], empresaDoadoraId: userInfo.id } } />
+                    </View>
                 </View>
             </ScrollView>
         )
     }
     else if(isLoggedIn && userInfo && userInfo.tipo === TipoEmpresa.RECEBEDORA) {
         return (
-            <ScrollView>
-                <View className="flex p-12 gap-16">
-                    <View className="items-center">
-                        {
-                            doacoes && doacoes.length > 0
-                            &&
-                            <>
-                                <Text className="text-2xl">Acompanhe sua última solicitação:</Text>
-                                <DoacaoCard doacao={ doacoes[0] } />   
-                            </>
-                        }
-                    </View>
-                    
+            <ScrollView className="flex-1 bg-branco">
+                <View className="p-6 gap-8">
                     <View>
-                        <Text className="text-2xl">Doação que você solicitou:</Text>
+                        <Text className="text-3xl font-extrabold text-azulEscuro mb-2">Dashboard</Text>
+                        <Text className="text-gray-500 text-lg">Olá, {userInfo.nome}! 👋</Text>
+                    </View>
+
+                    {
+                        doacoes && doacoes.length > 0
+                        &&
+                        <View className="gap-3 items-center">
+                            <Text className="text-xl font-bold text-azulEscuro self-start">Acompanhe sua última solicitação:</Text>
+                            <DoacaoCard doacao={ doacoes[0] } />   
+                        </View>
+                    }
+                    
+                    <View className="gap-4">
+                        <Text className="text-xl font-bold text-azulEscuro">Doação que você solicitou:</Text>
                         <DoacoesList filters={ { status: [ "ANDAMENTO" ], empresaRecebedoraId: userInfo.id } } />    
                     </View>
                     
-                    <View>
-                        <Text className="text-2xl">Doação para você solicitar:</Text>
+                    <View className="gap-4">
+                        <Text className="text-xl font-bold text-azulEscuro">Doações Disponíveis:</Text>
                         <DoacoesList filters={ { status: [ "DISPONIVEL" ] } } />
                     </View>
                 
-                <View className="ml-auto">
-                    <ButtonDefault 
-                        title="Encontrar mais doações" 
-                        icon={<MaterialIcons name="arrow-circle-right" color={"white"} 
-                        size={24} />} 
-                        onPress={() => {
-                            router.push({ pathname: '/lista-doacoes' })
-                        }}
+                    <View className="mt-4">
+                        <ButtonDefault 
+                            title="Encontrar mais doações" 
+                            icon={<MaterialIcons name="explore" color="white" size={24} />} 
+                            onPress={() => {
+                                router.push({ pathname: '/lista-doacoes' })
+                            }}
                         />
-                </View>
+                    </View>
                 </View>
             </ScrollView>
         )

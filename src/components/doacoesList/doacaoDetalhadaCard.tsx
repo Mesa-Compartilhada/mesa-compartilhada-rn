@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import { Image, Text, View, Pressable } from "react-native";
 import { Button } from "react-native-paper";
 import ButtonDefault from "../buttons/buttonDefault";
-import { getDoacaoByFilter, updateStateDoacao } from "@/src/api/services/doacaoService";
+import { getDoacaoById, updateStateDoacao } from "@/src/api/services/doacaoService";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -16,22 +16,43 @@ type Props = {
 
 export default function DoacaoDetalhadaCard({ d }: Props) {
     const [doacao, setDoacao] = useState(d)
-    const empresaDoadora = doacao.empresaDoadora
+    const empresaDoadora = doacao?.empresaDoadora
     const router = useRouter()
     const { userInfo } = useAuth()
 
     useEffect(() => {
-        setDoacao(d)
-        updateDoacao()
+        if (d) {
+            setDoacao(d)
+            updateDoacao()
+        }
     }, [d])
 
     const updateDoacao = async () => {
-        const result = await getDoacaoByFilter({id: d.id})
-        setDoacao(result[0])
+        if (!d?.id) return
+        try {
+            const result = await getDoacaoById(d.id)
+            if (result) {
+                // Handle possible API response wrapping
+                const finalData = (result as any).data || result;
+                if (finalData && (finalData.id || finalData.nome)) {
+                    setDoacao(finalData)
+                }
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar doação:", error)
+        }
     }
 
+    if (!doacao) {
+        return (
+            <View className="flex-1 items-center justify-center p-10 bg-branco">
+                <Text className="text-azul font-bold">Carregando detalhes...</Text>
+            </View>
+        )
+    }
 
     const getStatusStyle = (status: StatusDoacao) => {
+        if (!status) return { bg: "bg-gray-50", text: "text-gray-600", dot: "bg-gray-500", icon: "#4b5563", iconName: "help-outline", label: "Desconhecido" }
         switch (status) {
             case StatusDoacao.DISPONIVEL:
             return { bg: "bg-amber-50", text: "text-amber-600", dot: "bg-amber-500", icon: "#d97706", iconName: "hourglass-empty", label: "Disponível" }
@@ -82,18 +103,22 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                         <MaterialIcons name="location-pin" size={18} color="#62C0C0" /> 
                     </View>
                     <Text className="text-gray-500 font-medium flex-1">
-                        { doacao.empresaDoadora.endereco.logradouro }, { doacao.empresaDoadora.endereco.bairro }
+                        { empresaDoadora?.endereco?.logradouro || "Endereço não informado" }{ empresaDoadora?.endereco?.bairro ? `, ${empresaDoadora.endereco.bairro}` : "" }
                     </Text>
                 </View>
 
                 <Pressable 
                     className="flex-row items-center gap-2"
-                    onPress={() => { router.navigate({ pathname: "/(drawer)/perfil/[userId]", params: { userId: empresaDoadora.id } }) }}
+                    onPress={() => { 
+                        if (empresaDoadora?.id) {
+                            router.navigate({ pathname: "/(drawer)/perfil/[userId]", params: { userId: empresaDoadora.id } }) 
+                        }
+                    }}
                 >
                     <View className="p-1.5 bg-azul/10 rounded-lg">
                         <MaterialIcons name="store" size={18} color="#62C0C0" /> 
                     </View>
-                    <Text className="text-azul font-bold">{ empresaDoadora.nome }</Text>
+                    <Text className="text-azul font-bold">{ empresaDoadora?.nome || "Doador desconhecido" }</Text>
                 </Pressable>
             </View>
 
@@ -208,7 +233,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                             await updateStateDoacao(doacao.id, 
                                 {
                                     status: StatusDoacao.CONCLUIDA,
-                                    empresaRecebedoraId: doacao.empresaRecebedora.id,
+                                    empresaRecebedoraId: doacao.empresaRecebedora?.id,
                                     empresaSolicitanteId: userInfo.id
                                 }
                             )

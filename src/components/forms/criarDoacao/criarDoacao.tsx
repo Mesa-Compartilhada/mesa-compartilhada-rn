@@ -8,45 +8,54 @@ import ButtonDefault from "@/src/components/buttons/buttonDefault";
 import { Formik } from "formik"
 import * as yup from "yup"
 import PickerDefault from "@/src/components/inputs/pickerDefault";
-import axios from "axios";
-import { addEndereco } from "@/src/api/services/enderecoService";
-import { addEmpresa } from "@/src/api/services/empresaServices";
+import { addDoacao } from "@/src/api/services/doacaoService";
 import { ScrollView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import Snackbar from "@/src/components/snackbar/Snackbar";
 import ImagePickerButton from "@/src/components/buttons/imagePickerButton";
-import { TiposEmpresa } from "@/src/constants/empresa/tipos";
-import { categoriasEstabelecimento, categoriasInstituicao } from "@/src/constants/empresa/categorias";
-import { Endereco, EnderecoAdd } from "@/src/types/endereco";
-import { EmpresaAdd } from "@/src/types/empresa";
 import { TipodeArmazenamento, TipodoAlimento } from "@/src/constants/doacoes/tipo";
-
-const API_CEP_URL = "https://cep.awesomeapi.com.br/json"
+import { DoacaoAdd } from "@/src/types/doacao";
+import { useAuth } from "@/src/context/AuthContext";
+import { UnidadeMedida } from "@/src/constants/enums";
 
 const schema = yup.object().shape({
   nome: yup.string().required("É necessário digitar o nome da sua doação"),
   descricao: yup.string().required("É necessário digitar a descrição"),
   observacao: yup.string().required("É necessário digitar a observação"),
-  dataFabricacao: yup.string().min(8, "Muito curta. Mínimo: 8 caracteres").required("É necessário digitar a data de fabricação"),
-  dataValidade: yup.string().min(8, "Muito curta. Mínimo: 8 caracteres").required("É necessário digitar a data de validade"),
-  dataMaxRetirada: yup.string().min(8, "Muito curta. Mínimo: 8 caracteres").required("É necessário digitar a data máxima para retirada"),
+  dataFabricacao: yup.string().min(10, "Formato: DD/MM/AAAA").required("É necessário digitar a data de fabricação"),
+  dataValidade: yup.string().min(10, "Formato: DD/MM/AAAA").required("É necessário digitar a data de validade"),
+  dataMaxRetirada: yup.string().min(10, "Formato: DD/MM/AAAA").required("É necessário digitar a data máxima para retirada"),
   horarioMin: yup.string().required("É necessário digitar o horário mínimo para retirada"),
   horarioMax: yup.string().required("É necessário digitar o horário máximo para retirada"),
   tipo: yup.number().required("Selecione o tipo de alimento"),
   categoria: yup.number().required("Selecione o tipo de armazenamento"),
   quantidade: yup.string().required("Informe a quantidade"),
-  unidadeMedida: yup.string().required("Informe a unidade de medida"),
+  unidadeMedida: yup.number().required("Informe a unidade de medida"),
   imagemCapa: yup.string(),
 })
+
+const unidadesMedidaOptions = [
+    { key: UnidadeMedida.KG, value: "Kilogramas (KG)" },
+    { key: UnidadeMedida.G, value: "Gramas (G)" },
+    { key: UnidadeMedida.L, value: "Litros (L)" },
+    { key: UnidadeMedida.ML, value: "Mililitros (ML)" },
+]
+
+const convertDateToISO = (dateStr: string) => {
+    try {
+        const [day, month, year] = dateStr.split("/");
+        if (!day || !month || !year) return dateStr;
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T00:00:00Z`;
+    } catch (e) {
+        return dateStr;
+    }
+}
 
 export default function CriarDoacao() {
     const [msg, setMsg] = useState("")
     const router = useRouter()
- 
-    async function cadastrar() {
-        // console.warn(logradouro)
-    }
+    const { userInfo } = useAuth()
 
     return (
         <View className="flex-1 bg-branco">
@@ -60,26 +69,60 @@ export default function CriarDoacao() {
                 dataMaxRetirada: "",
                 horarioMin: "",
                 horarioMax: "",
-                tipo: 0,
-                categoria: 0,
+                tipo: 1,
+                categoria: 1,
                 quantidade: "",
-                unidadeMedida: "",
+                unidadeMedida: UnidadeMedida.KG,
                 imagemCapa: "",
             }}
             validationSchema={schema}
             validateOnChange={false}
             validateOnBlur={true} 
-            onSubmit={ values => {
-                const cadastrar = async () => {
-                
+            onSubmit={ async (values, { setSubmitting }) => {
+                setSubmitting(true);
+                try {
+                    const doacaoAdd: DoacaoAdd = {
+                        nome: values.nome,
+                        descricao: values.descricao,
+                        observacao: values.observacao,
+                        dataFabricacao: convertDateToISO(values.dataFabricacao),
+                        dataValidade: convertDateToISO(values.dataValidade),
+                        dataCriada: new Date().toISOString(),
+                        dataMaxRetirada: convertDateToISO(values.dataMaxRetirada),
+                        horarioMin: values.horarioMin,
+                        horarioMax: values.horarioMax,
+                        tipoAlimento: values.tipo,
+                        tipoArmazenamento: values.categoria,
+                        empresaDoadoraId: userInfo?.id || "",
+                        quantidade: Number(values.quantidade),
+                        unidadeMedida: values.unidadeMedida,
+                        imagemCapa: values.imagemCapa,
+                    }
+
+                    console.log("Enviando doação:", JSON.stringify(doacaoAdd, null, 2));
+                    const result = await addDoacao(doacaoAdd);
+                    console.log(result);
+                    
+                    if(result.status) {
+                        setMsg("Doação criada com sucesso!");
+                        setTimeout(() => {
+                            router.replace("/(drawer)/(tabs)/dashboard");
+                        }, 2000);
+                    } else {
+                        setMsg("Erro ao criar doação. Verifique os dados.");
+                    }
+                } catch (error: any) {
+                    console.error("Erro fatal ao cadastrar doação:", error);
+                    setMsg("Erro na conexão com o servidor");
+                } finally {
+                    setSubmitting(false);
                 }
-                cadastrar()
             }}>
                 {({ 
                     values,
                     errors,
                     touched,
-                    isValid,
+                    isSubmitting,
                     handleChange,
                     handleBlur,
                     handleSubmit,
@@ -212,11 +255,13 @@ export default function CriarDoacao() {
                                     <View className="gap-2">
                                         <Text className="text-sm font-bold text-azulEscuro ml-1">Tipo de Alimento</Text>
                                         <PickerDefault values={TipodoAlimento} onChange={(key) => setFieldValue("tipo", key)} />
+                                        {errors.tipo && <Text className="text-xs text-red-500 ml-1">{errors.tipo}</Text>}
                                     </View>
 
                                     <View className="gap-2">
                                         <Text className="text-sm font-bold text-azulEscuro ml-1">Armazenamento</Text>
                                         <PickerDefault values={TipodeArmazenamento} onChange={(key) => setFieldValue("categoria", key)} />
+                                        {errors.categoria && <Text className="text-xs text-red-500 ml-1">{errors.categoria}</Text>}
                                     </View>
                                 </View>
 
@@ -237,23 +282,25 @@ export default function CriarDoacao() {
                                         </View>
                                         <View className="flex-1 gap-1">
                                             <Text className="text-sm font-semibold text-gray-500 ml-1">Unidade</Text>
-                                            <InputDefault 
-                                                value={values.unidadeMedida}
-                                                onChangeText={handleChange("unidadeMedida")}
-                                                onBlur={handleBlur("unidadeMedida")}
-                                                Icon={<Entypo name="ruler" color="#62C0C0" size={20} />} 
-                                                placeholder="Ex: kg" 
-                                                error={errors.unidadeMedida}
-                                            />
+                                            <PickerDefault values={unidadesMedidaOptions} onChange={(key) => setFieldValue("unidadeMedida", key)} />
+                                            {errors.unidadeMedida && (
+                                                <Text className="text-xs text-red-500 ml-1 font-medium">{errors.unidadeMedida}</Text>
+                                            )}
                                         </View>
                                     </View>
                                 </View>
 
                                 <View className="mt-4 mb-10">
                                     <ButtonDefault 
+                                        disabled={isSubmitting}
                                         icon={<MaterialIcons name="check-circle" size={24} color="white" />}
-                                        title="Criar Doação"
-                                        onPress={handleSubmit as any}
+                                        title={isSubmitting ? "Enviando..." : "Criar Doação"}
+                                        onPress={() => {
+                                            if (Object.keys(errors).length > 0) {
+                                                setMsg("Por favor, preencha todos os campos corretamente.");
+                                            }
+                                            handleSubmit();
+                                        }}
                                     />
                                 </View>
                             </View>

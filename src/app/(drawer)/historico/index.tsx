@@ -38,8 +38,7 @@ export default function Historico() {
 
     return (
         <ScrollView className="flex-1 bg-branco">
-            <CustomHeader icon={<MaterialIcons name="history" size={28} color="#003B5D" />} title="Histórico" />
-            
+        
             {doacoes.length > 0 ? (
                 <HistoricoList doacoes={doacoes} />
             ) : (

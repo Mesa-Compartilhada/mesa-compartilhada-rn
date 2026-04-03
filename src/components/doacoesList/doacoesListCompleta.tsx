@@ -6,30 +6,33 @@ import DoacaoCard from "./doacaoCard";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function DoacoesListCompleta() {
-    const [doacoes, setDoacoes] = useState<Doacao[] | null>()
+    const [doacoes, setDoacoes] = useState<Doacao[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
-        let response
         const fetchDoacoes = async () => {
-            response = await getDoacaoByFilter({ status: ["DISPONIVEL"] })
+            setIsLoading(true)
+            const response = await getDoacaoByFilter({ status: ["DISPONIVEL"] })
             setDoacoes(response)
+            setIsLoading(false)
         }
         fetchDoacoes()
     }, [])
 
-    useEffect(() => {
-        if(doacoes != null && doacoes) {
-            setIsLoading(false)
-        }
-    }, [doacoes])
+    if(isLoading) {
+        return (
+            <View className="p-10 items-center">
+                <Text>Carregando doações...</Text>
+            </View>
+        )
+    }
 
-    if(!isLoading && doacoes && doacoes.length >= 1) {
+    if(doacoes && doacoes.length >= 1) {
         return (
             <ScrollView className="p-4" contentContainerStyle={{ paddingBottom: 32 }}>
                 {
-                    doacoes?.map((doacao, index) => (
-                        <View key={index} className="items-center">
+                    doacoes.map((doacao, index) => (
+                        <View key={doacao.id || index} className="items-center">
                             <DoacaoCard doacao={doacao} />
                         </View>
                     ))
@@ -38,4 +41,9 @@ export default function DoacoesListCompleta() {
         )
     }
 
+    return (
+        <View className="p-10 items-center">
+            <Text className="text-gray-500">Nenhuma doação disponível no momento.</Text>
+        </View>
+    )
 }

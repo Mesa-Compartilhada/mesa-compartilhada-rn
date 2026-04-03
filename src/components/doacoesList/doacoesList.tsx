@@ -9,10 +9,11 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
 type Props = {
-    filters: DoacaoFilter
+    filters: DoacaoFilter,
+    refreshTrigger?: number
 }
 
-export function DoacoesList({ filters }: Props) {
+export function DoacoesList({ filters, refreshTrigger }: Props) {
     const [doacoes, setDoacoes] = useState<Doacao[] | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const carouselData = doacoes ? [...doacoes, null] : [];
@@ -24,16 +25,17 @@ export function DoacoesList({ filters }: Props) {
     const router = useRouter()
 
     useEffect(() => {
-        let res: [] = []
         const fetch = async () => {
-            res = await getDoacaoByFilter(filters)
-            setDoacoes(res.slice(0, 5))
+            setIsLoading(true)
+            const res = await getDoacaoByFilter(filters)
+            setDoacoes(res ? res.slice(0, 5) : [])
+            setIsLoading(false)
         } 
         fetch()
-    }, [])
+    }, [filters, refreshTrigger])
 
     useEffect(() => {
-        if(doacoes != null && doacoes) {
+        if(doacoes != null) {
             setIsLoading(false)
         }
     }, [doacoes])

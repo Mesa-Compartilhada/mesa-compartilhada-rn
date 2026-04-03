@@ -10,6 +10,7 @@ import { useRouter } from 'expo-router';
 import { TipoEmpresa } from '../../constants/enums';
 import { Colors } from '../../constants/Colors';
 import React from 'react';
+import NavigationHeader from '../../components/header/navigationHeader';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
     const { isLoggedIn, logoutUser, userInfo } = useAuth()
@@ -75,19 +76,8 @@ export default function ProtectedLayout() {
         <Drawer
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
+                header: (props) => <NavigationHeader {...props} />,
                 headerShown: true,
-                headerStyle: {
-                    backgroundColor: Colors.branco,
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#f3f4f6',
-                },
-                headerTitleStyle: {
-                    fontWeight: '800',
-                    color: Colors.azulEscuro,
-                },
-                headerTintColor: Colors.azul,
                 drawerActiveBackgroundColor: Colors.azul + '10',
                 drawerActiveTintColor: Colors.azulEscuro,
                 drawerInactiveTintColor: Colors.azul + '90',
@@ -115,9 +105,6 @@ export default function ProtectedLayout() {
                     drawerIcon: ({color, size}) => <MaterialIcons name='app-registration' size={size} color={color} />
                     }} />
             </Drawer.Protected>
-            <Drawer.Screen name="chat/index" options={{ title: "Chat",
-                drawerIcon: ({color, size}) => <MaterialIcons name='chat' size={size} color={color} />
-                }} />
             <Drawer.Protected guard={isLoggedIn}>
                 <Drawer.Screen name="(tabs)" options={{ title: "Início", headerShown: false, drawerIcon: ({color, size}) => <MaterialIcons name='house' size={size} color={color} /> }} />
                 <Drawer.Screen name="perfil/[userId]" options={{ drawerItemStyle: { display: "none" } }} />
@@ -127,6 +114,9 @@ export default function ProtectedLayout() {
                 <Drawer.Screen name='conta/index' options={{ drawerItemStyle: { display: "none" }, title: "Conta", 
                     drawerIcon: ({color, size}) => <MaterialIcons name='settings' size={size} color={color} /> }} 
                 />
+                <Drawer.Screen name="chat/index" options={{ title: "Assistente IA",
+                drawerIcon: ({color, size}) => <MaterialIcons name='chat' size={size} color={color} />
+                }} />
                 <Drawer.Screen name='configuracoes/index' options={{ title: "Configurações", 
                     drawerIcon: ({color, size}) => <MaterialIcons name='settings' size={size} color={color} /> }} 
                 />

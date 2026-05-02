@@ -1,7 +1,7 @@
 import { getDoacaoByFilter } from "@/src/api/services/doacaoService";
 import { Doacao } from "@/src/types/doacao";
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import DoacaoCard from "./doacaoCard";
 import { ScrollView } from "react-native-gesture-handler";
 

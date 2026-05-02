@@ -5,10 +5,11 @@ import dateFormatter from "@/src/utils/dateFormatter";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Image, Text, View, Pressable } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Icon } from "react-native-paper";
 import ButtonDefault from "../buttons/buttonDefault";
 import { getDoacaoById, updateStateDoacao } from "@/src/api/services/doacaoService";
 import { useEffect, useState } from "react";
+import Snackbar from "../snackbar/Snackbar";
 
 type Props = {
     d: Doacao
@@ -19,6 +20,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
     const empresaDoadora = doacao?.empresaDoadora
     const router = useRouter()
     const { userInfo } = useAuth()
+    const [msg, setMsg] = useState("")
 
     useEffect(() => {
         if (d) {
@@ -32,14 +34,14 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
         try {
             const result = await getDoacaoById(d.id)
             if (result) {
-                // Handle possible API response wrapping
                 const finalData = (result as any).data || result;
                 if (finalData && (finalData.id || finalData.nome)) {
                     setDoacao(finalData)
                 }
             }
         } catch (error) {
-            console.error("Erro ao atualizar doação:", error)
+            setMsg("Erro ao atualizar doação: " + error)
+            console.error("Erro ao atualizar doação: ", error)
         }
     }
 
@@ -163,6 +165,20 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                         </Text>
                     </View>
                 )}
+
+                {
+                    doacao.status === StatusDoacao.ANDAMENTO
+                    &&
+                    <View className="gap-1">
+                        <Text className="text-lg font-bold text-azulEscuro">Confirmações</Text>
+                        <Text className="text-gray-500 leading-6 font-medium">
+                            Doadora: { doacao.empresaDoadoraConcluida ? <MaterialIcons name="check" /> : <MaterialIcons name="cancel" /> }
+                        </Text>
+                        <Text className="text-gray-500 leading-6 font-medium">
+                            Recebedora: { doacao.empresaRecebedoraConcluida ? <MaterialIcons name="check" /> : <MaterialIcons name="cancel" /> }
+                        </Text>
+                    </View>
+                }
             </View>
 
             <View className="gap-4 mt-2">
@@ -182,6 +198,8 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                                 }
                             )
                             await updateDoacao()
+                            setMsg("Doacão solicitada")
+                            router.navigate({ pathname: "/dashboard" })
                         }}
                     />
                 }
@@ -191,22 +209,46 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                     && doacao.empresaRecebedora && doacao.empresaRecebedora.id === userInfo.id
                     && 
                     <View className="gap-3">
+                        {
+                            !doacao.empresaRecebedoraConcluida
+                            ?
+                            <ButtonDefault 
+                                title="Confirmar Recebimento"
+                                icon={<MaterialIcons name="check-circle" size={24} color="white" />}
+                                onPress={async () => {
+                                    await updateStateDoacao(doacao.id, 
+                                        {
+                                            status: StatusDoacao.CONCLUIDA,
+                                            empresaRecebedoraId: userInfo.id,
+                                            empresaSolicitanteId: userInfo.id
+                                        }
+                                    )
+                                    await updateDoacao()
+                                    setMsg("Recebimento confirmado")
+                                    router.navigate({ pathname: "/dashboard" })
+                                }}
+                            />
+                            :
+                            <ButtonDefault 
+                                title="Ainda não recebi"
+                                onPress={async () => {
+                                    await updateStateDoacao(doacao.id, 
+                                        {
+                                            status: StatusDoacao.CONCLUIDA,
+                                            empresaRecebedoraId: userInfo.id,
+                                            empresaSolicitanteId: userInfo.id
+                                        }
+                                    )
+                                    await updateDoacao()
+                                    setMsg("Recebimento não confirmado")
+                                    router.navigate({ pathname: "/dashboard" })
+                                }}
+                            />
+                        }
+                        
                         <ButtonDefault 
-                            title="Confirmar Recebimento"
-                            icon={<MaterialIcons name="check-circle" size={24} color="white" />}
-                            onPress={async () => {
-                                await updateStateDoacao(doacao.id, 
-                                    {
-                                        status: StatusDoacao.CONCLUIDA,
-                                        empresaRecebedoraId: userInfo.id,
-                                        empresaSolicitanteId: userInfo.id
-                                    }
-                                )
-                                await updateDoacao()
-                            }}
-                        />
-                        <Pressable 
-                            className="bg-red-50 p-4 rounded-2xl items-center justify-center border border-red-100"
+                            title="Cancelar Solicitação"
+                            className="bg-red-500 p-4 rounded-2xl items-center justify-center border border-red-100"
                             onPress={async () => {
                                 await updateStateDoacao(doacao.id, 
                                     {
@@ -216,32 +258,59 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                                     }
                                 )
                                 await updateDoacao()
+                                setMsg("Solicitação cancelada")
+                                router.navigate({ pathname: "/dashboard" })
                             }}
                         >
-                            <Text className="text-red-600 font-bold">Cancelar Solicitação</Text>
-                        </Pressable>
+                        </ButtonDefault>
                     </View>
                 }
                 {
                     userInfo?.tipo === TipoEmpresa.DOADORA
                     && doacao.status === StatusDoacao.ANDAMENTO
                     && 
-                    <ButtonDefault 
-                        title="Confirmar Entrega"
-                        icon={<MaterialIcons name="verified" size={24} color="white" />}
-                        onPress={async () => {
-                            await updateStateDoacao(doacao.id, 
-                                {
-                                    status: StatusDoacao.CONCLUIDA,
-                                    empresaRecebedoraId: doacao.empresaRecebedora?.id,
-                                    empresaSolicitanteId: userInfo.id
-                                }
-                            )
-                            await updateDoacao()
-                        }}
-                    />
+                    <View>
+                        {
+                            !doacao.empresaDoadoraConcluida
+                            ?
+                            <ButtonDefault 
+                                title="Confirmar Entrega"
+                                icon={<MaterialIcons name="verified" size={24} color="white" />}
+                                onPress={async () => {
+                                    await updateStateDoacao(doacao.id, 
+                                        {
+                                            status: StatusDoacao.CONCLUIDA,
+                                            empresaRecebedoraId: doacao.empresaRecebedora?.id,
+                                            empresaSolicitanteId: userInfo.id
+                                        }
+                                    )
+                                    await updateDoacao()
+                                    setMsg("Entrega confirmada")
+                                    router.navigate({ pathname: "/dashboard" })
+                                }}
+                            />
+                            :
+                            <ButtonDefault 
+                                title="Ainda não entreguei"
+                                icon={<MaterialIcons name="verified" size={24} color="white" />}
+                                onPress={async () => {
+                                    await updateStateDoacao(doacao.id, 
+                                        {
+                                            status: StatusDoacao.CONCLUIDA,
+                                            empresaRecebedoraId: doacao.empresaRecebedora?.id,
+                                            empresaSolicitanteId: userInfo.id
+                                        }
+                                    )
+                                    await updateDoacao()
+                                    setMsg("Entrega não confirmada")
+                                    router.navigate({ pathname: "/dashboard" })
+                                }}
+                            />
+                        }
+                    </View>
                 }
             </View>
+            <Snackbar children={msg} visible={msg.length >= 1} onDismiss={() => { setMsg("") }} duration={2000} />
         </View>
     )
 }

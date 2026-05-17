@@ -5,22 +5,21 @@ import dateFormatter from "@/src/utils/dateFormatter";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Image, Text, View, Pressable } from "react-native";
-import { Button, Icon } from "react-native-paper";
 import ButtonDefault from "../buttons/buttonDefault";
 import { getDoacaoById, updateStateDoacao } from "@/src/api/services/doacaoService";
 import { useEffect, useState } from "react";
-import Snackbar from "../snackbar/Snackbar";
+import { useSnackBar } from "@/src/context/SnackBarContext";
 
 type Props = {
     d: Doacao
 }
 
 export default function DoacaoDetalhadaCard({ d }: Props) {
+    const { showSnackbar } = useSnackBar()
     const [doacao, setDoacao] = useState(d)
     const empresaDoadora = doacao?.empresaDoadora
     const router = useRouter()
     const { userInfo } = useAuth()
-    const [msg, setMsg] = useState("")
 
     useEffect(() => {
         if (d) {
@@ -40,7 +39,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                 }
             }
         } catch (error) {
-            setMsg("Erro ao atualizar doação: " + error)
+            showSnackbar("Erro ao atualizar doação: " + error)
             console.error("Erro ao atualizar doação: ", error)
         }
     }
@@ -198,7 +197,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                                 }
                             )
                             await updateDoacao()
-                            setMsg("Doacão solicitada")
+                            showSnackbar("Doação solicitada")
                             router.navigate({ pathname: "/dashboard" })
                         }}
                     />
@@ -224,7 +223,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                                         }
                                     )
                                     await updateDoacao()
-                                    setMsg("Recebimento confirmado")
+                                    showSnackbar("Recebimento confirmado")
                                     router.navigate({ pathname: "/dashboard" })
                                 }}
                             />
@@ -240,7 +239,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                                         }
                                     )
                                     await updateDoacao()
-                                    setMsg("Recebimento não confirmado")
+                                    showSnackbar("Recebimento não confirmado")
                                     router.navigate({ pathname: "/dashboard" })
                                 }}
                             />
@@ -258,7 +257,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                                     }
                                 )
                                 await updateDoacao()
-                                setMsg("Solicitação cancelada")
+                                showSnackbar("Solicitação cancelada")
                                 router.navigate({ pathname: "/dashboard" })
                             }}
                         >
@@ -285,7 +284,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                                         }
                                     )
                                     await updateDoacao()
-                                    setMsg("Entrega confirmada")
+                                    showSnackbar("Entrega confirmada")
                                     router.navigate({ pathname: "/dashboard" })
                                 }}
                             />
@@ -302,7 +301,7 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                                         }
                                     )
                                     await updateDoacao()
-                                    setMsg("Entrega não confirmada")
+                                    showSnackbar("Entrega não confirmada")
                                     router.navigate({ pathname: "/dashboard" })
                                 }}
                             />
@@ -310,7 +309,6 @@ export default function DoacaoDetalhadaCard({ d }: Props) {
                     </View>
                 }
             </View>
-            <Snackbar children={msg} visible={msg.length >= 1} onDismiss={() => { setMsg("") }} duration={2000} />
         </View>
     )
 }
